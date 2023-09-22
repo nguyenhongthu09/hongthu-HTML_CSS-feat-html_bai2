@@ -32,6 +32,4 @@ export function deleteApply(applyId) {
   }
 
   return mang;
-
- 
 }

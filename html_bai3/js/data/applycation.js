@@ -2,42 +2,42 @@ export let allApplycations = [
     {
         id: 1,
         name: "Cococ",
-        image: "googleplus_icon.png"
+        image: "./img/googleplus_icon.png"
     },
     {
         id: 2,
         name: "Chrom",
-        image: "gg.png"
+        image: "./img/gg.png"
     },
     {
         id: 3,
         name: "Cai dat",
-        image: "vimeo_icon.png"
+        image: "./img/vimeo_icon.png"
     },
     {
         id: 4,
         name: "Dien thoai",
-        image: "skype_icon.png"
+        image: "./img/skype_icon.png"
     },
     {
         id: 5,
         name: "Lich",
-        image: "linkedin_icon.png"
+        image: "./img/linkedin_icon.png"
     },
     {
         id: 6,
         name: "Facebook",
-        image: "pinterest_icon.png"
+        image: "./img/pinterest_icon.png"
     },
     {
         id: 7,
         name: "Slack",
-        image: "stumbleupon_icon.png"
+        image: "./img/stumbleupon_icon.png"
     },
     {
         id: 8,
         name: "IG",
-        image: "tumblr_icon.png"
+        image: "./img/tumblr_icon.png"
     },
     // {
     //     id: 9,
