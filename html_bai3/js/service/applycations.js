@@ -19,11 +19,10 @@ export function deleteApply(applyId) {
   for (let i = 0; i < mang.length; i++) {
     if (mang[i].id === applyId) {
       applyToDelete = mang[i];
-      break; // Thoát khỏi vòng lặp sau khi tìm thấy phần tử
+      break;
     }
   }
 
-  // Nếu phần tử cần xóa đã được đánh dấu, loại bỏ nó khỏi mảng
   if (applyToDelete) {
     const index = mang.indexOf(applyToDelete);
     if (index !== -1) {

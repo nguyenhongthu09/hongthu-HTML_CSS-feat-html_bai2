@@ -1,1 +1,0 @@
-export const storeImg = ["chrom.png", "facebook.png", "gg.png" , "youtube_icon.png" , "vimeo_icon.png", "skype_icon.png" , "linkedin_icon.png"];

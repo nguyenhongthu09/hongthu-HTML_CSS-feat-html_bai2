@@ -5,7 +5,6 @@ import {
   getItemsApplycation,
   addApplycation,
 } from "../service/applycations.js";
-import { storeImg } from "../data/storeImg.js";
 import { uploadfileimg } from "./showApplycation.js";
 const btnNext = document.getElementById("next-slider");
 const btnPrev = document.getElementById("prev-slider");
@@ -56,47 +55,6 @@ btnPrev.addEventListener("click", () => {
   }
 });
 
-// btnNext.addEventListener("click", () => {
-//   page += 10;
-//   OldPage += 10;
-//   if (page > allApplycations.length && OldPage > allApplycations.length) {
-//     OldPage -= 10;
-//     handleGetAppInPage(allApplycations.length - (page - 10));
-//     page -= 10;
-//   } else {
-//     handleGetAppInPage(page);
-//   }
-// });
-
-// btnPrev.addEventListener("click", () => {
-//   page -= 10;
-//   OldPage -= 10;
-//   if (page <= 0) {
-//     page = 10;
-//     handleGetAppInPage(page);
-//     OldPage = 0;
-//   }
-// });
-
-// const handleGetAppInPage = (page) => {
-//   const AppInPages = [];
-
-//   allApplycations.forEach((data, index) => {
-//     if (index < page && index >= OldPage) {
-//       AppInPages.push(data);
-//     }
-//   });
-
-//   showUI(AppInPages);
-// };
-
-// export const ShowPageAfterAddApp = () => {
-//   handleGetAppInPage(page);
-// };
-
-// handleGetAppInPage(page);
-
-///////////////////////////////////////////
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
   const xoa = deleteApply(applyId);
@@ -115,13 +73,7 @@ function initializeDeleteButtonsEvent(deleteBtn) {
 const overlay = document.querySelector(".overlay");
 const boxItems = document.querySelector(".form-add-ungdung");
 const btnSubmit = document.getElementById("btnSubmit");
-let selectedImage = "";
 
-// export const getSelectedImg = (img) => {
-
-//   selectedImage = img;
-
-// };
 btnSubmit.addEventListener("click", () => {
   var nameInput = document.getElementById("name_icon");
   var nameError = document.getElementById("name_error");
@@ -134,48 +86,22 @@ btnSubmit.addEventListener("click", () => {
     nameError.style.display = "none";
     boxItems.style.display = "none";
     overlay.style.display = "none";
-     
   }
 
   const name = nameInput.value;
   const hinh = uploadedImage.src;
 
-  if (nameInput.value !== "" ) {
+  if (nameInput.value !== "") {
     addApplycation({
       id: allApplycations[allApplycations.length - 1].id + 1,
       name: name,
       image: hinh,
     });
-
   }
 
   showUI(mang);
   nameInput.value = "";
   nameInput.form.reset();
-  uploadedImage.src="";
+  uploadedImage.src = "";
   uploadedImage.style.display = "none";
-
-
 });
-// const handleShowStore = () => {
-//   const ShowStoreImg = document.getElementById("storeImg");
-
-//   ShowStoreImg.innerHTML = "";
-  // storeImg.forEach((img) => {
-  //   ShowStoreImg.innerHTML += `
-  //       <div class="boxStore">
-  //          <img class="img-store" src="./img/${img}" alt="" url="${img}" />
-  //       </div>
-  //   `;
-  // });
-
-//   const imgItemStores = document.querySelectorAll(".img-store");
-
-//   imgItemStores.forEach((img) => {
-//     img.addEventListener("click", () => {
-//       getSelectedImg(img.getAttribute("url"));
-//     });
-//   });
-// };
-
-// export { handleShowStore };
