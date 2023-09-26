@@ -5,11 +5,12 @@ export let itemsApplyInCart = [];
 export function getItemsApplycation() {
   return itemsApplyInCart;
 }
-
+//THEM
 export function addApplycation(data) {
   allApplycations.push(data);
 }
 let applyToDelete = null;
+//XOA
 export function deleteApply(applyId) {
   //   let icondel = [];
   //   icondel.push(applyId);
@@ -31,4 +32,11 @@ export function deleteApply(applyId) {
   }
 
   return mang;
+}
+//CHINH SUA
+export function editSubmit(selectedApply, allApplycations,newname, newimg){
+  if (selectedApply.id >= 0 && selectedApply.id < allApplycations.length) {
+    allApplycations[selectedApply.id].name = newname;
+    allApplycations[selectedApply.id].image = newimg;
+  }
 }

@@ -34,11 +34,11 @@ export let allApplycations = [
         name: "Slack",
         image: "./img/stumbleupon_icon.png"
     },
-    {
-        id: 8,
-        name: "IG",
-        image: "./img/tumblr_icon.png"
-    },
+    // {
+    //     id: 8,
+    //     name: "IG",
+    //     image: "./img/tumblr_icon.png"
+    // },
     // {
     //     id: 9,
     //     name: "Tiktok",
