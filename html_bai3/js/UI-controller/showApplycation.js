@@ -66,10 +66,10 @@ export function closeTag(){
   boxItems.style.display = "none";
   overlay.style.display = "none";
 }
-export function openTag(){
-  boxItems.style.display = "block";
-  overlay.style.display = "block";
-}
+// export function openTag(){
+//   boxItems.style.display = "block";
+//   overlay.style.display = "block";
+// }
 export function openTagAddApply(){
   nameError.style.display = "block";
   boxItem.style.display = "block";

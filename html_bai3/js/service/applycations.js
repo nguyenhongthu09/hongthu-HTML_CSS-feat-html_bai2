@@ -34,9 +34,3 @@ export function deleteApply(applyId) {
   return mang;
 }
 //CHINH SUA
-export function editSubmit(selectedApply, allApplycations,newname, newimg){
-  if (selectedApply.id >= 0 && selectedApply.id < allApplycations.length) {
-    allApplycations[selectedApply.id].name = newname;
-    allApplycations[selectedApply.id].image = newimg;
-  }
-}

@@ -6,8 +6,8 @@ import {
   addApplycation,
 } from "../service/applycations.js";
 import { uploadfileimg, uploadedImageEdit } from "./showApplycation.js";
-import { editSubmit } from "../service/applycations.js";
-import { closeTag , openTag , closeTagAddApply , openTagAddApply } from "./showApplycation.js";
+// import { editSubmit } from "../service/applycations.js";
+import { closeTag ,closeTagAddApply , openTagAddApply } from "./showApplycation.js";
 const btnNext = document.getElementById("next-slider");
 const btnPrev = document.getElementById("prev-slider");
 const cart = document.getElementById("list-items-apply");
@@ -163,7 +163,8 @@ btnSubmit.addEventListener("click", () => {
 
 function edit() {
   let selectedApply = null;
-  
+  const overlay = document.querySelector(".overlay");
+  const boxItems = document.getElementById("boxItems"); 
   const itemsApplyElements = document.querySelectorAll(".items-apply");
   const editedNameIconInput = document.getElementById("edited_name_icon");
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
@@ -172,10 +173,12 @@ function edit() {
     element?.addEventListener("click", () => {
       allApplycations.forEach((itemss)  =>{
             if(itemss.id === parseInt( element.getAttribute("edit"))){
+              console.log(element.children.length);
               selectedApply = {
                 id: itemss.id, 
-                name: element.querySelector("span").textContent,
-                image: element.querySelector("img").src,
+                name: element.children[element.children.length -1].textContent,
+                
+                image: element.children[element.children.length - 2].src,
                 // index: index,
               };
               console.log(selectedApply);
@@ -186,6 +189,11 @@ function edit() {
       editedNameIconInput.value = selectedApply.name;
       editedUploadedImage.src= selectedApply.image;
       openTag();
+     function openTag(){
+     
+        boxItems.style.display = "block";
+        overlay.style.display = "block";
+      }
     });
   });
   
@@ -211,9 +219,19 @@ function edit() {
   
   });
 
+
+  function editSubmit(selectedApply, allApplycations,newname, newimg){
+    if (selectedApply.id >= 0 && selectedApply.id < allApplycations.length) {
+      allApplycations[selectedApply.id].name = newname;
+      allApplycations[selectedApply.id].image = newimg;
+    }
+  }
   const btnEditCancel = document.getElementById("btnEditCancel");
   btnEditCancel.addEventListener("click", () => {
     closeTag();
   });
 }
 edit();
+
+
+
