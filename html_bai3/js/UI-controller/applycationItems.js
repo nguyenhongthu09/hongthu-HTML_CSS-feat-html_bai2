@@ -83,6 +83,7 @@ btnSubmit.addEventListener("click", () => {
 });
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
+  console.log(applyId);
   const xoa = deleteApply(applyId);
   showUI(xoa);
 }
@@ -90,9 +91,11 @@ function handleDeleteButtonClick(delUngdung) {
 function initializeDeleteButtonsEvent(deleteBtn) {
   deleteBtn.forEach((delUngdung) => {
     delUngdung.addEventListener("click", () => {
+      console.log("ok");
       handleDeleteButtonClick(delUngdung);
     });
   });
+ 
 }
 
 let newData = {

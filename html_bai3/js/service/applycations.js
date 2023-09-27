@@ -10,7 +10,7 @@ export function getItemsApplycation() {
 //   allApplycations.push(data);
 // }
 
-let applyToDelete = null;
+// let applyToDelete = null;
 //XOA
 export function deleteApply(applyId) {
   //   let icondel = [];
@@ -18,20 +18,30 @@ export function deleteApply(applyId) {
   //   itemsApplyInCart = mang.filter((apply) => !icondel.includes(apply.id));
   //   return itemsApplyInCart;
 
-  for (let i = 0; i < mang.length; i++) {
-    if (mang[i].id === applyId) {
-      applyToDelete = mang[i];
-      break;
-    }
-  }
+  // for (let i = 0; i < mang.length; i++) {
+  //   if (mang[i].id === applyId) {
+  //     applyToDelete = mang[i];
+  //     break;
+  //   }
+  // }
 
-  if (applyToDelete) {
-    const index = mang.indexOf(applyToDelete);
-    if (index !== -1) {
-      mang.splice(index, 1);
-    }
-  }
+  // if (applyToDelete) {
+  //   const index = mang.indexOf(applyToDelete);
+  //   if (index !== -1) {
+  //     mang.splice(index, 1);
+  //   }
+  // }
 
-  return mang;
+  // return mang;
+
+allApplycations.forEach((data, i) =>{
+      data.forEach((item , index) =>{
+              if(item.id === applyId){
+                allApplycations[i].splice(index , 1);
+              }
+      });
+     
+});
+
 }
 //CHINH SUA
