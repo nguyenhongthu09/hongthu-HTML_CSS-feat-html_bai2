@@ -17,7 +17,22 @@ let current = 1;
 let start = 0;
 let end = perPage;
 let currentPage = 0;
-const allPages = [[]];
+
+// const itemsPerPage = 5; 
+const allPages = []; 
+for (let i = 0; i < allApplycations.length; i += perPage) {
+  const page = allApplycations.slice(i, i + perPage);
+  const pageObject = {
+    index: allPages.length, 
+    items: page,
+  };
+
+  allPages.push(pageObject);
+
+
+}
+console.log(allPages);
+
 
 export let mang = allApplycations;
 export function showUI(applys) {
@@ -32,6 +47,7 @@ export function showUI(applys) {
         <span>${apply.name}</span>
     </div>
         `;
+        
     }
     
   });
@@ -50,6 +66,7 @@ btnNext.addEventListener("click", () => {
     current++;
     start = (current - 1) * perPage;
     end = current * perPage;
+    currentPage++;
   }
 
   showUI(mang);
@@ -61,26 +78,28 @@ btnPrev.addEventListener("click", () => {
     current--;
     start = (current - 1) * perPage;
     end = current * perPage;
-    showUI(mang);
+  currentPage--;
+   
   }
-  
+  showUI(mang);
 });
-allPages[currentPage] = [];
+
 function addApplycation(apply) {
   allApplycations.push(apply);
-  if (allPages[currentPage].length < 6) {
-    allPages[currentPage].push(apply);
-  } else {
-   allPages[currentPage].push(apply);
-    // allPages[currentPage].push(...currentPage, apply);
+  const currentPageIndex = currentPage;
+  if (currentPageIndex < allPages.length) {
+   
+     allPages[currentPageIndex].items.push(apply);
+        
+            
+  }  else {
+    // currentPageIndex++;
+    const newPage = { index: currentPageIndex, items: [apply] };
+    allPages.push(newPage);
   }
 
-  showUI(allPages[currentPage]);
- 
-  
+  showUI(allPages[currentPageIndex].items);
 }
-
-
 
 
 btnSubmit.addEventListener("click", () => {
