@@ -18,25 +18,21 @@ let start = 0;
 let end = perPage;
 let currentPage = 0;
 
-// const itemsPerPage = 5; 
-const allPages = []; 
+// const itemsPerPage = 5;
+const allPages = [];
 for (let i = 0; i < allApplycations.length; i += perPage) {
   const page = allApplycations.slice(i, i + perPage);
   const pageObject = {
-    index: allPages.length, 
+    index: allPages.length,
     items: page,
   };
 
   allPages.push(pageObject);
-
-
 }
 console.log(allPages);
 
-
 export let mang = allApplycations;
 export function showUI(applys) {
-
   cart.innerHTML = "";
   applys?.forEach((apply, index) => {
     if (index >= start && index < end) {
@@ -47,9 +43,7 @@ export function showUI(applys) {
         <span>${apply.name}</span>
     </div>
         `;
-        
     }
-    
   });
 
   initializeFormActions();
@@ -70,7 +64,8 @@ btnNext.addEventListener("click", () => {
   }
 
   showUI(mang);
- 
+  // showUI(allPages[currentPage].items);
+  // console.log(allPages[currentPage]);
 });
 btnPrev.addEventListener("click", () => {
   if (current > 1) {
@@ -78,29 +73,27 @@ btnPrev.addEventListener("click", () => {
     current--;
     start = (current - 1) * perPage;
     end = current * perPage;
-  currentPage--;
-   
+    currentPage--;
   }
   showUI(mang);
+  // showUI(allPages[currentPage].items);
 });
-
+const currentPageIndex = currentPage;
 function addApplycation(apply) {
   allApplycations.push(apply);
-  const currentPageIndex = currentPage;
+
   if (currentPageIndex < allPages.length) {
-   
-     allPages[currentPageIndex].items.push(apply);
-        
-            
-  }  else {
-    // currentPageIndex++;
+    allPages[currentPageIndex].items.push(apply);
+  } else {
+    currentPageIndex++;
     const newPage = { index: currentPageIndex, items: [apply] };
     allPages.push(newPage);
   }
 
   showUI(allPages[currentPageIndex].items);
-}
 
+  // console.log(allPages[currentPageIndex].items);
+}
 
 btnSubmit.addEventListener("click", () => {
   var nameInput = document.getElementById("name_icon");
@@ -122,7 +115,7 @@ btnSubmit.addEventListener("click", () => {
       image: hinh,
     });
   }
- 
+  // showUI(allPages[currentPageIndex].items);
   showUI(mang);
   nameInput.value = "";
   nameInput.form.reset();
