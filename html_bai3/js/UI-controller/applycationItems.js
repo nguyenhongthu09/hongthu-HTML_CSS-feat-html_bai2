@@ -12,38 +12,18 @@ const btnNext = document.getElementById("next-slider");
 const btnPrev = document.getElementById("prev-slider");
 const cart = document.getElementById("list-items-apply");
 const cartItems = getItemsApplycation();
-let perPage = 5;
-let current = 1;
-let start = 0;
-let end = perPage;
 let currentPage = 0;
-
-// const itemsPerPage = 5;
-const allPages = [];
-for (let i = 0; i < allApplycations.length; i += perPage) {
-  const page = allApplycations.slice(i, i + perPage);
-  const pageObject = {
-    index: allPages.length,
-    items: page,
-  };
-
-  allPages.push(pageObject);
-}
-console.log(allPages);
-
 export let mang = allApplycations;
-export function showUI(applys) {
+export function showUI() {
   cart.innerHTML = "";
-  applys?.forEach((apply, index) => {
-    if (index >= start && index < end) {
-      cart.innerHTML += `
+  allApplycations[currentPage]?.forEach((apply, index) => {
+    cart.innerHTML += `
         <div class="items-apply" edit = "${apply.id}">
         <button class="btn-del" apply_id = "${apply.id}"  >-</button>
         <img  src="${apply.image}" alt="">
         <span>${apply.name}</span>
     </div>
         `;
-    }
   });
 
   initializeFormActions();
@@ -55,44 +35,24 @@ export function showUI(applys) {
 showUI();
 
 btnNext.addEventListener("click", () => {
-  if (end < allApplycations.length) {
-    // Chỉ tăng current nếu chưa đến trang cuối cùng
-    current++;
-    start = (current - 1) * perPage;
-    end = current * perPage;
-    currentPage++;
+  currentPage++;
+  if (currentPage > allApplycations.length - 1) {
+    currentPage = allApplycations.length - 1;
   }
 
-  showUI(mang);
-  // showUI(allPages[currentPage].items);
-  // console.log(allPages[currentPage]);
+  showUI();
 });
 btnPrev.addEventListener("click", () => {
-  if (current > 1) {
-    // Chỉ giảm current nếu không ở trang đầu tiên
-    current--;
-    start = (current - 1) * perPage;
-    end = current * perPage;
-    currentPage--;
+  currentPage--;
+  if (currentPage < 0) {
+    currentPage = 0;
   }
-  showUI(mang);
-  // showUI(allPages[currentPage].items);
+  showUI();
 });
-const currentPageIndex = currentPage;
+
 function addApplycation(apply) {
-  allApplycations.push(apply);
-
-  if (currentPageIndex < allPages.length) {
-    allPages[currentPageIndex].items.push(apply);
-  } else {
-    currentPageIndex++;
-    const newPage = { index: currentPageIndex, items: [apply] };
-    allPages.push(newPage);
-  }
-
-  showUI(allPages[currentPageIndex].items);
-
-  // console.log(allPages[currentPageIndex].items);
+  allApplycations[currentPage].push(apply);
+  showUI();
 }
 
 btnSubmit.addEventListener("click", () => {
@@ -115,8 +75,7 @@ btnSubmit.addEventListener("click", () => {
       image: hinh,
     });
   }
-  // showUI(allPages[currentPageIndex].items);
-  showUI(mang);
+  showUI();
   nameInput.value = "";
   nameInput.form.reset();
   uploadedImage.src = "";
@@ -125,7 +84,6 @@ btnSubmit.addEventListener("click", () => {
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
   const xoa = deleteApply(applyId);
-  // deleteApply(applyId);
   showUI(xoa);
 }
 
@@ -137,53 +95,6 @@ function initializeDeleteButtonsEvent(deleteBtn) {
   });
 }
 
-// function addItemToCurrentPage(item) {
-//   // const currentPageItems = applysByPage[currentPage];
-//   const startIndex = currentPage * itemsPerPage;
-//   console.log(startIndex);
-//   const endIndex = startIndex + itemsPerPage;
-//   console.log(endIndex);
-//   // Kiểm tra xem trang hiện tại đã đầy chưa
-//   if (endIndex < allApplycations.length) {
-//     // Nếu trang hiện tại chưa đầy, thêm mục vào sau mục cuối cùng
-//     allApplycations.splice(endIndex, startIndex - 2, item);
-//     // const thu = allApplycations.concat(applysByPage);
-//     console.log(allApplycations);
-//   } else {
-//     // Nếu trang hiện tại đã đầy hoặc là trang cuối cùng, thêm mục vào cuối mảng
-//     allApplycations.push(item);
-//   }
-// }
-
-// btnSubmit.addEventListener("click", () => {
-//   var nameInput = document.getElementById("name_icon");
-//   const uploadedImage = document.getElementById("uploadedImage");
-
-//   if (!nameInput.value) {
-//     openTagAddApply();
-//   } else {
-//     closeTagAddApply();
-//   }
-
-//   const name = nameInput.value;
-//   const hinh = uploadedImage.src;
-
-//   if (nameInput.value !== "") {
-//     const newApply = {
-//       id: allApplycations[applysByPage.length - 1].id,
-//       name: name,
-//       image: hinh,
-//     };
-
-//     addItemToCurrentPage(newApply);
-
-//     showUI(allApplycations);
-//   }
-//   nameInput.value = "";
-//   nameInput.form.reset();
-//   uploadedImage.src = "";
-//   uploadedImage.style.display = "none";
-// });
 let newData = {
   id: "",
   name: "",

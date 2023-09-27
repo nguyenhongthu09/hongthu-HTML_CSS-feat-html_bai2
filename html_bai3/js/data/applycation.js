@@ -1,4 +1,5 @@
 export let allApplycations = [
+   [
     {
         id: 1,
         name: "Cococ",
@@ -24,6 +25,8 @@ export let allApplycations = [
         name: "Lich",
         image: "./img/linkedin_icon.png"
     },
+   ],
+   [
     {
         id: 6,
         name: "Facebook",
@@ -34,6 +37,7 @@ export let allApplycations = [
         name: "Slack",
         image: "./img/stumbleupon_icon.png"
     },
+   
     // {
     //     id: 8,
     //     name: "IG",
@@ -74,4 +78,5 @@ export let allApplycations = [
     //     name: "IG",
     //     image: "./img/tumblr_icon.png"
     // },
+    ]
 ]
