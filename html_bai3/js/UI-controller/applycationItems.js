@@ -1,10 +1,6 @@
 import { allApplycations } from "../data/applycation.js";
 import { initializeFormActions } from "./showApplycation.js";
-import {
-  deleteApply,
-  getItemsApplycation,
-
-} from "../service/applycations.js";
+import { deleteApply, getItemsApplycation } from "../service/applycations.js";
 import { uploadfileimg, uploadedImageEdit } from "./showApplycation.js";
 // import { editSubmit } from "../service/applycations.js";
 import {
@@ -21,10 +17,11 @@ let current = 1;
 let start = 0;
 let end = perPage;
 let currentPage = 0;
-const allPages = [];
+const allPages = [[]];
 
 export let mang = allApplycations;
 export function showUI(applys) {
+
   cart.innerHTML = "";
   applys?.forEach((apply, index) => {
     if (index >= start && index < end) {
@@ -36,6 +33,7 @@ export function showUI(applys) {
     </div>
         `;
     }
+    
   });
 
   initializeFormActions();
@@ -55,6 +53,7 @@ btnNext.addEventListener("click", () => {
   }
 
   showUI(mang);
+ 
 });
 btnPrev.addEventListener("click", () => {
   if (current > 1) {
@@ -64,28 +63,34 @@ btnPrev.addEventListener("click", () => {
     end = current * perPage;
     showUI(mang);
   }
+  
 });
-
+allPages[currentPage] = [];
 function addApplycation(apply) {
-  allApplycations.push(apply); 
-  const currentItems = allPages[currentPage];
-  currentItems.push(apply);
-  if (currentItems.length > perPage) {
-    currentItems.push(apply);
+  allApplycations.push(apply);
+  if (allPages[currentPage].length < 6) {
+    allPages[currentPage].push(apply);
+  } else {
+   allPages[currentPage].push(apply);
+    // allPages[currentPage].push(...currentPage, apply);
   }
-  allPages[currentPage] = currentItems;
-  showUI(currentItems);
+
+  showUI(allPages[currentPage]);
+ 
+  
 }
 
-allPages[currentPage] = [];
+
+
+
 btnSubmit.addEventListener("click", () => {
   var nameInput = document.getElementById("name_icon");
 
   const uploadedImage = document.getElementById("uploadedImage");
   if (!nameInput.value) {
-   openTagAddApply();
+    openTagAddApply();
   } else {
-   closeTagAddApply();
+    closeTagAddApply();
   }
 
   const name = nameInput.value;
@@ -98,7 +103,7 @@ btnSubmit.addEventListener("click", () => {
       image: hinh,
     });
   }
-
+ 
   showUI(mang);
   nameInput.value = "";
   nameInput.form.reset();
@@ -170,10 +175,9 @@ function initializeDeleteButtonsEvent(deleteBtn) {
 let newData = {
   id: "",
   name: "",
-  element : ""
-}
+  element: "",
+};
 function edit() {
-
   const overlay = document.querySelector(".overlay");
   const boxItems = document.getElementById("boxItems");
   let itemsApplyElements = document.querySelectorAll(".items-apply");
