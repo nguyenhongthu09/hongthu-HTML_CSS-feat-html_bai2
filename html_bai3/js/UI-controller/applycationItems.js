@@ -3,11 +3,15 @@ import { initializeFormActions } from "./showApplycation.js";
 import {
   deleteApply,
   getItemsApplycation,
-  addApplycation,
+
 } from "../service/applycations.js";
 import { uploadfileimg, uploadedImageEdit } from "./showApplycation.js";
 // import { editSubmit } from "../service/applycations.js";
-import { closeTag ,closeTagAddApply , openTagAddApply } from "./showApplycation.js";
+import {
+  closeTag,
+  closeTagAddApply,
+  openTagAddApply,
+} from "./showApplycation.js";
 const btnNext = document.getElementById("next-slider");
 const btnPrev = document.getElementById("prev-slider");
 const cart = document.getElementById("list-items-apply");
@@ -17,10 +21,9 @@ let current = 1;
 let start = 0;
 let end = perPage;
 let currentPage = 0;
-let itemsPerPage = 5;
-const applysByPage = [[]];
-export let mang = allApplycations;
+const allPages = [];
 
+export let mang = allApplycations;
 export function showUI(applys) {
   cart.innerHTML = "";
   applys?.forEach((apply, index) => {
@@ -34,6 +37,7 @@ export function showUI(applys) {
         `;
     }
   });
+
   initializeFormActions();
   uploadfileimg();
   uploadedImageEdit();
@@ -41,6 +45,7 @@ export function showUI(applys) {
   edit();
 }
 showUI();
+
 btnNext.addEventListener("click", () => {
   if (end < allApplycations.length) {
     // Chỉ tăng current nếu chưa đến trang cuối cùng
@@ -61,6 +66,45 @@ btnPrev.addEventListener("click", () => {
   }
 });
 
+function addApplycation(apply) {
+  allApplycations.push(apply); 
+  const currentItems = allPages[currentPage];
+  currentItems.push(apply);
+  if (currentItems.length > perPage) {
+    currentItems.push(apply);
+  }
+  allPages[currentPage] = currentItems;
+  showUI(currentItems);
+}
+
+allPages[currentPage] = [];
+btnSubmit.addEventListener("click", () => {
+  var nameInput = document.getElementById("name_icon");
+
+  const uploadedImage = document.getElementById("uploadedImage");
+  if (!nameInput.value) {
+   openTagAddApply();
+  } else {
+   closeTagAddApply();
+  }
+
+  const name = nameInput.value;
+  const hinh = uploadedImage.src;
+
+  if (nameInput.value !== "") {
+    addApplycation({
+      id: allApplycations[allApplycations.length - 1].id + 1,
+      name: name,
+      image: hinh,
+    });
+  }
+
+  showUI(mang);
+  nameInput.value = "";
+  nameInput.form.reset();
+  uploadedImage.src = "";
+  uploadedImage.style.display = "none";
+});
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
   const xoa = deleteApply(applyId);
@@ -76,162 +120,119 @@ function initializeDeleteButtonsEvent(deleteBtn) {
   });
 }
 
-
-const btnSubmit = document.getElementById("btnSubmit");
+// function addItemToCurrentPage(item) {
+//   // const currentPageItems = applysByPage[currentPage];
+//   const startIndex = currentPage * itemsPerPage;
+//   console.log(startIndex);
+//   const endIndex = startIndex + itemsPerPage;
+//   console.log(endIndex);
+//   // Kiểm tra xem trang hiện tại đã đầy chưa
+//   if (endIndex < allApplycations.length) {
+//     // Nếu trang hiện tại chưa đầy, thêm mục vào sau mục cuối cùng
+//     allApplycations.splice(endIndex, startIndex - 2, item);
+//     // const thu = allApplycations.concat(applysByPage);
+//     console.log(allApplycations);
+//   } else {
+//     // Nếu trang hiện tại đã đầy hoặc là trang cuối cùng, thêm mục vào cuối mảng
+//     allApplycations.push(item);
+//   }
+// }
 
 // btnSubmit.addEventListener("click", () => {
 //   var nameInput = document.getElementById("name_icon");
- 
 //   const uploadedImage = document.getElementById("uploadedImage");
+
 //   if (!nameInput.value) {
-//    openTagAddApply();
+//     openTagAddApply();
 //   } else {
-//    closeTagAddApply();
+//     closeTagAddApply();
 //   }
 
 //   const name = nameInput.value;
 //   const hinh = uploadedImage.src;
 
 //   if (nameInput.value !== "") {
-//     addApplycation({
-//       id: allApplycations[allApplycations.length - 1].id + 1,
+//     const newApply = {
+//       id: allApplycations[applysByPage.length - 1].id,
 //       name: name,
 //       image: hinh,
-//     });
-//   }
+//     };
 
- 
-//   showUI(mang);
+//     addItemToCurrentPage(newApply);
+
+//     showUI(allApplycations);
+//   }
 //   nameInput.value = "";
 //   nameInput.form.reset();
 //   uploadedImage.src = "";
 //   uploadedImage.style.display = "none";
 // });
-
-function addItemToCurrentPage(item) {
-  // const currentPageItems = applysByPage[currentPage];
-  const startIndex = currentPage * itemsPerPage;
-  console.log(startIndex);
-  const endIndex = startIndex + itemsPerPage;
-  console.log(endIndex);
-  // Kiểm tra xem trang hiện tại đã đầy chưa
-  if (endIndex < allApplycations.length) {
-    // Nếu trang hiện tại chưa đầy, thêm mục vào sau mục cuối cùng
-    allApplycations.splice(endIndex, startIndex - 2, item);
-    // const thu = allApplycations.concat(applysByPage);
-    console.log(allApplycations);
-  } else {
-    // Nếu trang hiện tại đã đầy hoặc là trang cuối cùng, thêm mục vào cuối mảng
-    allApplycations.push(item);
-  }
+let newData = {
+  id: "",
+  name: "",
+  element : ""
 }
-
-btnSubmit.addEventListener("click", () => {
-  var nameInput = document.getElementById("name_icon");
-  const uploadedImage = document.getElementById("uploadedImage");
-
-  if (!nameInput.value) {
-    openTagAddApply();
-  } else {
-    closeTagAddApply();
-  }
-
-  const name = nameInput.value;
-  const hinh = uploadedImage.src;
-
-  if (nameInput.value !== "") {
-    const newApply = {
-      id: allApplycations[applysByPage.length - 1].id  ,
-      name: name,
-      image: hinh,
-    };
-
-    addItemToCurrentPage( newApply);
-  
-    showUI(allApplycations);
-  
-  }
-  nameInput.value = "";
-  nameInput.form.reset();
-  uploadedImage.src = "";
-  uploadedImage.style.display = "none";
-});
-
-
-
-
-
 function edit() {
-  let selectedApply = null;
+
   const overlay = document.querySelector(".overlay");
-  const boxItems = document.getElementById("boxItems"); 
-  const itemsApplyElements = document.querySelectorAll(".items-apply");
+  const boxItems = document.getElementById("boxItems");
+  let itemsApplyElements = document.querySelectorAll(".items-apply");
   const editedNameIconInput = document.getElementById("edited_name_icon");
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
+  const edited_file = document.querySelector("#edited_file");
 
   itemsApplyElements.forEach((element, index) => {
     element?.addEventListener("click", () => {
-      allApplycations.forEach((itemss)  =>{
-            if(itemss.id === parseInt( element.getAttribute("edit"))){
-              console.log(element.children.length);
-              selectedApply = {
-                id: itemss.id, 
-                name: element.children[element.children.length -1].textContent,
-                
-                image: element.children[element.children.length - 2].src,
-                // index: index,
-              };
-              console.log(selectedApply);
-            }
-      });
-     
-        // console.log(selectedApply);
-      editedNameIconInput.value = selectedApply.name;
-      editedUploadedImage.src= selectedApply.image;
-      openTag();
-     function openTag(){
-     
-        boxItems.style.display = "block";
-        overlay.style.display = "block";
-      }
+      handleEditApp(element);
     });
   });
-  
 
-  const btnEditSubmit = document.getElementById("btnEditSubmit");
- 
-  btnEditSubmit.addEventListener("click", () => {
-    if (selectedApply) {
-      const newname = editedNameIconInput.value;
-      const newimg = editedUploadedImage.src;
-      editSubmit(selectedApply, allApplycations,newname, newimg);
-
-      const selectedElement = itemsApplyElements[selectedApply.id];
-      selectedElement.querySelector("span").textContent = newname;
-      selectedElement.querySelector("img").src = newimg;
-
-      showUI(allApplycations);
-      editedNameIconInput.value = ""; 
-      editedUploadedImage.src = "#";
-      selectedApply = null;
-        closeTag();
-    }
-  
-  });
-
-
-  function editSubmit(selectedApply, allApplycations,newname, newimg){
-    if (selectedApply.id >= 0 && selectedApply.id < allApplycations.length) {
-      allApplycations[selectedApply.id].name = newname;
-      allApplycations[selectedApply.id].image = newimg;
-    }
-  }
-  const btnEditCancel = document.getElementById("btnEditCancel");
-  btnEditCancel.addEventListener("click", () => {
-    closeTag();
-  });
+  const handleEditApp = (element) => {
+    const idCurrentEdit = parseInt(element.getAttribute("edit"));
+    allApplycations.forEach((data) => {
+      if (data.id === idCurrentEdit) {
+        editedUploadedImage.style.display = "block";
+        editedNameIconInput.value = data.name;
+        editedUploadedImage.src = data.image;
+        boxItems.style.display = "block";
+        overlay.style.display = "block";
+        newData = {
+          id: idCurrentEdit,
+          name: data.name,
+          image: data.image,
+          element: element,
+        };
+      }
+    });
+    editedNameIconInput.addEventListener("change", (e) => {
+      newData.name = e.target.value;
+    });
+    edited_file.addEventListener("change", (e) => {
+      newData.image = URL.createObjectURL(e.target.file[0]);
+    });
+  };
 }
-edit();
+const btnEditSubmit = document.getElementById("btnEditSubmit");
 
+btnEditSubmit.addEventListener("click", () => {
+  let element = newData.element;
+  element.children[element.children.length - 1].innerText = newData.name;
+  element.children[element.children.length - 2].src = newData.image;
+  allApplycations.forEach((item) => {
+    if (item.id === newData.id) {
+      item.name = newData.name;
+      item.image = newData.image;
+    }
+  });
+  newData = {
+    id: "",
+    name: "",
+    element: "",
+  };
+  closeTag();
+});
 
-
+const btnEditCancel = document.getElementById("btnEditCancel");
+btnEditCancel.addEventListener("click", () => {
+  closeTag();
+});

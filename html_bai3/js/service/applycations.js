@@ -6,9 +6,10 @@ export function getItemsApplycation() {
   return itemsApplyInCart;
 }
 //THEM
-export function addApplycation(data) {
-  allApplycations.push(data);
-}
+// export function addApplycation(data) {
+//   allApplycations.push(data);
+// }
+
 let applyToDelete = null;
 //XOA
 export function deleteApply(applyId) {
