@@ -1,22 +1,22 @@
 import { allApplycations } from "../data/applycation.js";
 import { initializeFormActions } from "./showApplycation.js";
-import { deleteApply, getItemsApplycation } from "../service/applycations.js";
+import { deleteApply } from "../service/applycations.js";
 import { uploadfileimg, uploadedImageEdit } from "./showApplycation.js";
-// import { editSubmit } from "../service/applycations.js";
+
 import {
   closeTag,
   closeTagAddApply,
   openTagAddApply,
+  openTag,
 } from "./showApplycation.js";
 const btnNext = document.getElementById("next-slider");
 const btnPrev = document.getElementById("prev-slider");
 const cart = document.getElementById("list-items-apply");
-const cartItems = getItemsApplycation();
 let currentPage = 0;
-export let mang = allApplycations;
+
 export function showUI() {
   cart.innerHTML = "";
-  allApplycations[currentPage]?.forEach((apply, index) => {
+  allApplycations[currentPage]?.forEach((apply) => {
     cart.innerHTML += `
         <div class="items-apply" edit = "${apply.id}">
         <button class="btn-del" apply_id = "${apply.id}"  >-</button>
@@ -83,7 +83,6 @@ btnSubmit.addEventListener("click", () => {
 });
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
-  console.log(applyId);
   const xoa = deleteApply(applyId);
   showUI(xoa);
 }
@@ -91,11 +90,9 @@ function handleDeleteButtonClick(delUngdung) {
 function initializeDeleteButtonsEvent(deleteBtn) {
   deleteBtn.forEach((delUngdung) => {
     delUngdung.addEventListener("click", () => {
-      console.log("ok");
       handleDeleteButtonClick(delUngdung);
     });
   });
- 
 }
 
 let newData = {
@@ -104,8 +101,6 @@ let newData = {
   element: "",
 };
 function edit() {
-  const overlay = document.querySelector(".overlay");
-  const boxItems = document.getElementById("boxItems");
   let itemsApplyElements = document.querySelectorAll(".items-apply");
   const editedNameIconInput = document.getElementById("edited_name_icon");
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
@@ -119,20 +114,21 @@ function edit() {
 
   const handleEditApp = (element) => {
     const idCurrentEdit = parseInt(element.getAttribute("edit"));
-    allApplycations.forEach((data) => {
-      if (data.id === idCurrentEdit) {
-        editedUploadedImage.style.display = "block";
-        editedNameIconInput.value = data.name;
-        editedUploadedImage.src = data.image;
-        boxItems.style.display = "block";
-        overlay.style.display = "block";
-        newData = {
-          id: idCurrentEdit,
-          name: data.name,
-          image: data.image,
-          element: element,
-        };
-      }
+    allApplycations.forEach((data, i) => {
+      data.forEach((item, index) => {
+        if (item.id === idCurrentEdit) {
+          editedUploadedImage.style.display = "block";
+          editedNameIconInput.value = item.name;
+          editedUploadedImage.src = item.image;
+          openTag();
+          newData = {
+            id: idCurrentEdit,
+            name: item.name,
+            image: item.image,
+            element: element,
+          };
+        }
+      });
     });
     editedNameIconInput.addEventListener("change", (e) => {
       newData.name = e.target.value;
@@ -148,11 +144,13 @@ btnEditSubmit.addEventListener("click", () => {
   let element = newData.element;
   element.children[element.children.length - 1].innerText = newData.name;
   element.children[element.children.length - 2].src = newData.image;
-  allApplycations.forEach((item) => {
-    if (item.id === newData.id) {
-      item.name = newData.name;
-      item.image = newData.image;
-    }
+  allApplycations.forEach((data) => {
+    data.forEach((item) => {
+      if (item.id === newData.id) {
+        item.name = newData.name;
+        item.image = newData.image;
+      }
+    });
   });
   newData = {
     id: "",
