@@ -13,7 +13,7 @@ const btnNext = document.getElementById("next-slider");
 const btnPrev = document.getElementById("prev-slider");
 const cart = document.getElementById("list-items-apply");
 let currentPage = 0;
-
+let currentId = calculateCurrentId(); 
 export function showUI() {
   cart.innerHTML = "";
   allApplycations[currentPage]?.forEach((apply) => {
@@ -50,11 +50,25 @@ btnPrev.addEventListener("click", () => {
   showUI();
 });
 
-function addApplycation(apply) {
+function addApplycation(apply, currentPage) {
+  // allApplycations[currentPage].push(apply);
+  currentId++; 
+  apply.id = currentId; 
   allApplycations[currentPage].push(apply);
+
   showUI();
 }
-
+function calculateCurrentId() {
+  let maxId = 0;
+  for (const page of allApplycations) {
+    for (const apply of page) {
+      if (apply.id > maxId) {
+        maxId = apply.id;
+      }
+    }
+  }
+  return maxId;
+}
 btnSubmit.addEventListener("click", () => {
   var nameInput = document.getElementById("name_icon");
 
@@ -70,10 +84,10 @@ btnSubmit.addEventListener("click", () => {
 
   if (nameInput.value !== "") {
     addApplycation({
-      id: allApplycations[allApplycations.length - 1].id + 1,
+      // id: allApplycations[allApplycations.length - 1].id + 1,
       name: name,
       image: hinh,
-    });
+    }, currentPage);
   }
   showUI();
   nameInput.value = "";
