@@ -1,5 +1,5 @@
-import { addApplycation } from "../service/applications.js";
-import { getCurrentPages } from "../service/applications.js";
+import { addApplycation, getCurrentPages } from "../service/applications.js";
+import { showListApplication } from "./applicationList.js";
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
   const boxItems = document.getElementById("boxItems");
@@ -45,7 +45,7 @@ export function initializeFormActions() {
         getCurrentPages()
       );
     }
-
+    showListApplication();
     nameInput.value = "";
     nameInput.form.reset();
     uploadedImage.src = "";

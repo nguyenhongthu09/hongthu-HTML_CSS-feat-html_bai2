@@ -1,5 +1,4 @@
 import { allApplications } from "../data/application.js";
-import { showListApplication } from "../UI-controller/applicationList.js";
 let itemsApplyInCart = [];
 let currentId = calculateCurrentId();
 let currentPages = 0;
@@ -42,8 +41,6 @@ export function addApplycation(apply, currentPages) {
   currentId++;
   apply.id = currentId;
   allApplications[currentPages].push(apply);
-
-  showListApplication();
 }
 
 /// UPDATE
