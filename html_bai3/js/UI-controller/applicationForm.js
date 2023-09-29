@@ -28,9 +28,9 @@ export function initializeFormActions() {
     var nameInput = document.getElementById("name_icon");
     const uploadedImage = document.getElementById("uploadedImage");
     if (!nameInput.value) {
-      openTagAddApply();
+      openFormAddApplication();
     } else {
-      closeTagAddApply();
+      closeFormAddApplication();
     }
 
     const name = nameInput.value;
@@ -95,7 +95,7 @@ export function uploadedImageEdit() {
   };
 }
 
-export function closeEditTag() {
+export function closeFormEditApplication() {
   const { boxItems, overlay } = getDOMForms();
   boxItems.style.display = "none";
   overlay.style.display = "none";
@@ -104,7 +104,7 @@ export function closeEditTag() {
 import { newData } from "./applicationList.js";
 import { updateData } from "../service/applcations.js";
 
-export function openEditTag() {
+export function openFormEditApplication() {
   const { boxItems, overlay } = getDOMForms();
   boxItems.style.display = "block";
   overlay.style.display = "block";
@@ -120,20 +120,20 @@ export function openEditTag() {
     newData.name = "";
     newData.element = "";
 
-    closeEditTag();
+    closeFormEditApplication();
   });
 
   btnEditCancel.addEventListener("click", () => {
-    closeEditTag();
+    closeFormEditApplication();
   });
 }
-export function openTagAddApply() {
+export function openFormAddApplication() {
   const { boxItem, overlay, nameError } = getDOMForms();
   nameError.style.display = "block";
   boxItem.style.display = "block";
   overlay.style.display = "block";
 }
-export function closeTagAddApply() {
+export function closeFormAddApplication() {
   const { boxItem, overlay, nameError } = getDOMForms();
   nameError.style.display = "none";
   boxItem.style.display = "none";

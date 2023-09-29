@@ -1,6 +1,6 @@
 import { allApplications } from "../data/application.js";
 import { deleteApply } from "../service/applcations.js";
-import { openEditTag } from "./applicationForm.js";
+import { openFormEditApplication } from "./applicationForm.js";
 import { getCurrentPages } from "../main.js";
 const cart = document.getElementById("list-items-apply");
 
@@ -68,7 +68,7 @@ function editApplicationEvent() {
             element: element,
           };
 
-          openEditTag();
+          openFormEditApplication();
         }
       });
     });

@@ -1,7 +1,5 @@
 import { allApplications } from "../data/application.js";
 import { showListApplication } from "../UI-controller/applicationList.js";
-// import { getCurrentPages } from "../UI-controller/applicationForm.js";
-// import { getCurrentPages } from "../main.js";
 export let itemsApplyInCart = [];
 export function getItemsApplycation() {
   return itemsApplyInCart;
@@ -19,11 +17,11 @@ export function deleteApply(applyId) {
 }
 
 //CREAT
-let currentId = calculateCurrentId(); 
+let currentId = calculateCurrentId();
 
 export function addApplycation(apply, getCurrentPages) {
-  currentId++; 
-  apply.id = currentId; 
+  currentId++;
+  apply.id = currentId;
   allApplications[getCurrentPages].push(apply);
 
   showListApplication();
@@ -52,10 +50,9 @@ export function updateData(id, name, image) {
   });
 }
 
-//CHANGE PAGE 
+//CHANGE PAGE
 const maxPage = allApplications.length - 1;
 export function changePage(action, getCurrentPages) {
-
   if (action === "increment") {
     if (getCurrentPages < maxPage) {
       return getCurrentPages + 1;
@@ -67,8 +64,4 @@ export function changePage(action, getCurrentPages) {
   }
 
   return getCurrentPages;
-
-
-
 }
-
