@@ -4,7 +4,9 @@ import {
   getCurrentPages,
   changePage,
   deleteApply,
+  delPage,
 } from "../service/applications.js";
+
 const cart = document.getElementById("list-items-apply");
 export function showListApplication() {
   cart.innerHTML = "";
@@ -22,6 +24,21 @@ export function showListApplication() {
   initializeDeleteButtonsEvent();
   editApplicationEvent();
 }
+
+const addPageButton = document.querySelector(".add-page");
+addPageButton.addEventListener("click", () => {
+  const newPage = [];
+  allApplications.push(newPage);
+  changePage("increment");
+  showListApplication();
+});
+
+const delPageButton = document.querySelector(".del-page");
+delPageButton.addEventListener("click", () => {
+  delPage();
+  changePage("decrement");
+  showListApplication();
+});
 
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");

@@ -57,19 +57,29 @@ export function updateData(id, name, image) {
 }
 
 //CHANGE PAGE
-
+let totalPages = 1;
 export function changePage(action) {
-
   const maxPage = allApplications.length - 1;
   if (action === "increment") {
     if (currentPages < maxPage) {
       currentPages = currentPages + 1;
-      
+    } else if (currentPages === maxPage) {
+      totalPages = totalPages + 1;
     }
   } else if (action === "decrement") {
     if (currentPages > 0) {
-     currentPages = currentPages - 1;
+      currentPages = currentPages - 1;
     }
   }
+}
 
+export function delPage() {
+  if (totalPages > 1) {
+    const currentPageIndex = getCurrentPages();
+    allApplications.splice(currentPageIndex, 1);
+    if (currentPages >= totalPages - 1) {
+      currentPages = totalPages - 1;
+    }
+    totalPages -= 1;
+  }
 }
