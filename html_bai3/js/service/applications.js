@@ -1,6 +1,15 @@
 import { allApplications } from "../data/application.js";
 import { showListApplication } from "../UI-controller/applicationList.js";
-export let itemsApplyInCart = [];
+let itemsApplyInCart = [];
+let currentId = calculateCurrentId();
+let currentPages = 0;
+
+export function getCurrentPages() {
+  return currentPages;
+}
+export function setCurrentPages(newPage) {
+  currentPages = newPage;
+}
 export function getItemsApplycation() {
   return itemsApplyInCart;
 }
@@ -17,15 +26,7 @@ export function deleteApply(applyId) {
 }
 
 //CREAT
-let currentId = calculateCurrentId();
 
-export function addApplycation(apply, getCurrentPages) {
-  currentId++;
-  apply.id = currentId;
-  allApplications[getCurrentPages].push(apply);
-
-  showListApplication();
-}
 function calculateCurrentId() {
   let maxId = 0;
   for (const page of allApplications) {
@@ -37,6 +38,14 @@ function calculateCurrentId() {
   }
   return maxId;
 }
+export function addApplycation(apply, currentPages) {
+  currentId++;
+  apply.id = currentId;
+  allApplications[currentPages].push(apply);
+
+  showListApplication();
+}
+
 /// UPDATE
 
 export function updateData(id, name, image) {
@@ -51,17 +60,18 @@ export function updateData(id, name, image) {
 }
 
 //CHANGE PAGE
-const maxPage = allApplications.length - 1;
-export function changePage(action, getCurrentPages) {
+
+export function changePage(action, currentPages) {
+  const maxPage = allApplications.length - 1;
   if (action === "increment") {
-    if (getCurrentPages < maxPage) {
-      return getCurrentPages + 1;
+    if (currentPages < maxPage) {
+      return currentPages + 1;
     }
   } else if (action === "decrement") {
-    if (getCurrentPages > 0) {
-      return getCurrentPages - 1;
+    if (currentPages > 0) {
+      return currentPages - 1;
     }
   }
 
-  return getCurrentPages;
+  return currentPages;
 }

@@ -1,5 +1,5 @@
-import { addApplycation } from "../service/applcations.js";
-import { getCurrentPages } from "../main.js";
+import { addApplycation } from "../service/applications.js";
+import { getCurrentPages } from "../service/applications.js";
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
   const boxItems = document.getElementById("boxItems");
@@ -42,7 +42,7 @@ export function initializeFormActions() {
           name: name,
           image: hinh,
         },
-        getCurrentPages
+        getCurrentPages()
       );
     }
 
@@ -102,7 +102,7 @@ export function closeFormEditApplication() {
 }
 
 import { newData } from "./applicationList.js";
-import { updateData } from "../service/applcations.js";
+import { updateData } from "../service/applications.js";
 
 export function openFormEditApplication() {
   const { boxItems, overlay } = getDOMForms();

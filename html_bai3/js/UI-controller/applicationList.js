@@ -1,12 +1,12 @@
 import { allApplications } from "../data/application.js";
-import { deleteApply } from "../service/applcations.js";
+import { deleteApply } from "../service/applications.js";
 import { openFormEditApplication } from "./applicationForm.js";
-import { getCurrentPages } from "../main.js";
+import { getCurrentPages } from "../service/applications.js";
 const cart = document.getElementById("list-items-apply");
-
 export function showListApplication() {
   cart.innerHTML = "";
-  allApplications[getCurrentPages]?.forEach((apply) => {
+  const currentPage = getCurrentPages();
+  allApplications[currentPage]?.forEach((apply) => {
     cart.innerHTML += `
         <div class="items-apply" edit = "${apply.id}">
         <button class="btn-del" apply_id = "${apply.id}"  >-</button>
@@ -16,17 +16,18 @@ export function showListApplication() {
         `;
   });
 
-  initializeDeleteButtonsEvent(document.querySelectorAll(".btn-del"));
+  initializeDeleteButtonsEvent();
   editApplicationEvent();
 }
 
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
-  const xoa = deleteApply(applyId);
-  showListApplication(xoa);
+  deleteApply(applyId);
+  showListApplication();
 }
 
-function initializeDeleteButtonsEvent(deleteBtn) {
+function initializeDeleteButtonsEvent() {
+  const deleteBtn = document.querySelectorAll(".btn-del");
   deleteBtn.forEach((delUngdung) => {
     delUngdung.addEventListener("click", () => {
       handleDeleteButtonClick(delUngdung);
