@@ -1,4 +1,4 @@
-export let allApplycations = [
+export let allApplications = [
    [
     {
         id: 1,
