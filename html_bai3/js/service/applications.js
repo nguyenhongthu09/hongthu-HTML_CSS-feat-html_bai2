@@ -61,17 +61,18 @@ export function updateData(id, name, image) {
 
 //CHANGE PAGE
 
-export function changePage(action, currentPages) {
+export function changePage(action) {
+
   const maxPage = allApplications.length - 1;
   if (action === "increment") {
     if (currentPages < maxPage) {
-      return currentPages + 1;
+      currentPages = currentPages + 1;
+      
     }
   } else if (action === "decrement") {
     if (currentPages > 0) {
-      return currentPages - 1;
+     currentPages = currentPages - 1;
     }
   }
 
-  return currentPages;
 }

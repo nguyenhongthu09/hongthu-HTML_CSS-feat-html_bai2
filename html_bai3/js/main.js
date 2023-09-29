@@ -1,10 +1,6 @@
 import { showListApplication } from "./UI-controller/applicationList.js";
 import { initializeFormActions } from "./UI-controller/applicationForm.js";
-import {
-  changePage,
-  getCurrentPages,
-  setCurrentPages,
-} from "./service/applications.js";
+import { changePage } from "./service/applications.js";
 function main() {
   showListApplication();
   initializeFormActions();
@@ -12,16 +8,12 @@ function main() {
   const btnPrev = document.getElementById("prev-slider");
 
   btnNext.addEventListener("click", () => {
-    const currentPage = getCurrentPages();
-    const nextPage = changePage("increment", currentPage);
-    setCurrentPages(nextPage);
+    changePage("increment");
     showListApplication();
   });
 
   btnPrev.addEventListener("click", () => {
-    const currentPage = getCurrentPages();
-    const prevPage = changePage("decrement", currentPage);
-    setCurrentPages(prevPage);
+    changePage("decrement");
     showListApplication();
   });
 }
