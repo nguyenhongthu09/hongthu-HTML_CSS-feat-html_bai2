@@ -26,7 +26,6 @@ export function showListApplication() {
 
   initializeDeleteButtonsEvent();
   editApplicationEvent();
-  console.log(totalPages);
 }
 
 const delPageButton = document.querySelector(".del-page");
@@ -37,7 +36,6 @@ export function handlePageButtonClick() {
     changePage("increment");
     showListApplication();
     updateNumberFooter();
-    delPageButton.style.display = "block";
   });
 
   delPageButton.addEventListener("click", () => {
@@ -46,9 +44,6 @@ export function handlePageButtonClick() {
       changePage("decrement");
       showListApplication();
       updateNumberFooter();
-      if (totalPages === 1) {
-        delPageButton.style.display = "none";
-      }
     }
   });
 }

@@ -82,11 +82,12 @@ export function addNewPage() {
 }
 
 export function delPage() {
-  allApplications.splice(currentPages, 1);
-
-  totalPages = allApplications.length;
-
-  if (currentPages >= totalPages) {
-    currentPages = totalPages - 1;
+  if (allApplications.length > 1) {
+    allApplications.splice(currentPages, 1);
+    if (currentPages === 0) {
+      currentPages = 0;
+    } else {
+      currentPages--;
+    }
   }
 }
