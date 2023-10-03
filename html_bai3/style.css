@@ -204,25 +204,31 @@
         height: 100%;
         object-fit: contain;
     }
+    #boxItems {
+        position: absolute;
+        z-index: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgb(180, 173, 173);
+        display: none;
+        width: 100%;
+    
+    }
+    
+    .form-edit-ungdung {
+        padding: 15px;
+    }
+    
+    .form_edit_ud_name,
+    .form_edit_ud_upfile {
+        margin-bottom: 10px;
+    }
+    .number-page {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
 }
 
-#boxItems {
-    position: absolute;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgb(180, 173, 173);
-    display: none;
-    width: 100%;
-
-}
-
-.form-edit-ungdung {
-    padding: 15px;
-}
-
-.form_edit_ud_name,
-.form_edit_ud_upfile {
-    margin-bottom: 10px;
-}

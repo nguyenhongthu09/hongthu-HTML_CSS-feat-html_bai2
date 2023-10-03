@@ -1,7 +1,7 @@
 import { allApplications } from "../data/application.js";
-let itemsApplyInCart = [];
 let currentId = calculateCurrentId();
-let currentPages = 0;
+export let currentPageIndex = 0;
+export let currentPages = 0;
 
 export function getCurrentPages() {
   return currentPages;
@@ -10,7 +10,7 @@ export function setCurrentPages(newPage) {
   currentPages = newPage;
 }
 export function getItemsApplycation() {
-  return itemsApplyInCart;
+  return allApplications;
 }
 
 //DELETE
@@ -57,7 +57,7 @@ export function updateData(id, name, image) {
 }
 
 //CHANGE PAGE
-let totalPages = 1;
+export let totalPages = allApplications.length;
 export function changePage(action) {
   const maxPage = allApplications.length - 1;
   if (action === "increment") {
@@ -73,13 +73,20 @@ export function changePage(action) {
   }
 }
 
+//ADD PAGE
+
+export function addNewPage() {
+  const newPage = [];
+  allApplications.push(newPage);
+  currentPages = allApplications.length - 1;
+}
+
 export function delPage() {
-  if (totalPages > 1) {
-    const currentPageIndex = getCurrentPages();
-    allApplications.splice(currentPageIndex, 1);
-    if (currentPages >= totalPages - 1) {
-      currentPages = totalPages - 1;
-    }
-    totalPages -= 1;
+  allApplications.splice(currentPages, 1);
+
+  totalPages = allApplications.length;
+
+  if (currentPages >= totalPages) {
+    currentPages = totalPages - 1;
   }
 }

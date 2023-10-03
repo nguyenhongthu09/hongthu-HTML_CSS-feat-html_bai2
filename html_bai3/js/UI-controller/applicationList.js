@@ -1,10 +1,13 @@
 import { allApplications } from "../data/application.js";
 import { openFormEditApplication } from "./applicationForm.js";
+import { setCurrentPages } from "../service/applications.js";
 import {
   getCurrentPages,
   changePage,
   deleteApply,
   delPage,
+  addNewPage,
+  totalPages,
 } from "../service/applications.js";
 
 const cart = document.getElementById("list-items-apply");
@@ -23,22 +26,32 @@ export function showListApplication() {
 
   initializeDeleteButtonsEvent();
   editApplicationEvent();
+  console.log(totalPages);
 }
 
-const addPageButton = document.querySelector(".add-page");
-addPageButton.addEventListener("click", () => {
-  const newPage = [];
-  allApplications.push(newPage);
-  changePage("increment");
-  showListApplication();
-});
-
 const delPageButton = document.querySelector(".del-page");
-delPageButton.addEventListener("click", () => {
-  delPage();
-  changePage("decrement");
-  showListApplication();
-});
+export function handlePageButtonClick() {
+  const addPageButton = document.querySelector(".add-page");
+  addPageButton.addEventListener("click", () => {
+    addNewPage();
+    changePage("increment");
+    showListApplication();
+    updateNumberFooter();
+    delPageButton.style.display = "block";
+  });
+
+  delPageButton.addEventListener("click", () => {
+    if (totalPages > 1) {
+      delPage();
+      changePage("decrement");
+      showListApplication();
+      updateNumberFooter();
+      if (totalPages === 1) {
+        delPageButton.style.display = "none";
+      }
+    }
+  });
+}
 
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
@@ -47,12 +60,22 @@ export function setPageButtonEvent() {
   btnNext.addEventListener("click", () => {
     changePage("increment");
     showListApplication();
+    updateNumberFooter();
   });
 
   btnPrev.addEventListener("click", () => {
     changePage("decrement");
     showListApplication();
+    updateNumberFooter();
   });
+}
+
+export function updateNumberFooter() {
+  const currentpage = getCurrentPages();
+  const currentPageElement = document.getElementById("current-page");
+  if (currentPageElement) {
+    currentPageElement.textContent = currentpage + 1;
+  }
 }
 
 function handleDeleteButtonClick(delUngdung) {
@@ -111,5 +134,12 @@ function editApplicationEvent() {
     element?.addEventListener("click", () => {
       handleEditApp(element);
     });
+  });
+}
+
+export function loadedWeb() {
+  window.addEventListener("DOMContentLoaded", () => {
+    setCurrentPages(0);
+    updateNumberFooter();
   });
 }
