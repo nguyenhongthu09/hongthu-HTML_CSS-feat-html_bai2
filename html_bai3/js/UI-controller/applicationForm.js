@@ -1,4 +1,4 @@
-import { addApplycation, getCurrentPages } from "../service/applications.js";
+import { getCurrentPageFromQueryParams,addApplicationToCustomPage  } from "../service/applications.js";
 import { showListApplication } from "./applicationList.js";
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
@@ -34,16 +34,15 @@ export function initializeFormActions() {
     }
 
     const name = nameInput.value;
-    const hinh = uploadedImage.src;
-
+    const image = uploadedImage.src;
+    const pageIndex = getCurrentPageFromQueryParams();
     if (nameInput.value !== "") {
-      addApplycation(
-        {
-          name: name,
-          image: hinh,
-        },
-        getCurrentPages()
-      );
+      const newApplication = {
+        name: name,
+        image: image,
+      };
+      // addApplicationToPage(pageIndex, newApplication);
+      addApplicationToCustomPage(newApplication , pageIndex);
     }
     showListApplication();
     nameInput.value = "";
@@ -114,11 +113,12 @@ export function openFormEditApplication() {
     let element = newData.element;
     element.children[element.children.length - 1].innerText = newData.name;
     element.children[element.children.length - 2].src = newData.image;
-    updateData(newData.id, newData.name, newData.image);
+    updateData(newData.id, newData.name, newData.image , newData.pageIndex);
 
     newData.id = "";
     newData.name = "";
     newData.element = "";
+    newData.pageIndex = null;
 
     closeFormEditApplication();
   });

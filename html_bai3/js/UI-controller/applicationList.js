@@ -1,49 +1,55 @@
 import { allApplications } from "../data/application.js";
 import { openFormEditApplication } from "./applicationForm.js";
-import { setCurrentPages } from "../service/applications.js";
+import {  updateQueryParam } from "../service/applications.js";
 import {
-  getCurrentPages,
   changePage,
   deleteApply,
   delPage,
   addNewPage,
-  totalPages,
+  getCurrentPageFromQueryParams,
+  fetchPages,currentPagee 
 } from "../service/applications.js";
-
+import { pageState, applicationState } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
-export function showListApplication() {
+ 
+export async function showListApplication() {
   cart.innerHTML = "";
-  const currentPage = getCurrentPages();
-  allApplications[currentPage]?.forEach((apply) => {
-    cart.innerHTML += `
-        <div class="items-apply" edit = "${apply.id}">
-        <button class="btn-del" apply_id = "${apply.id}"  >-</button>
-        <img  src="${apply.image}" alt="">
-        <span>${apply.name}</span>
-    </div>
-        `;
-  });
+  const currentPageData = pageState.find((page) => page.id === currentPagee);
 
+  if (currentPageData) {
+    const filteredApplications = applicationState.filter(
+      (apply) => apply.pageIndex === currentPageData.id
+    );
+    filteredApplications.forEach((apply) => {
+      cart.innerHTML += `
+        <div class="items-apply" edit="${apply.id}">
+          <button class="btn-del" apply_id="${apply.id}">-</button>
+          <img src="${apply.image}" alt="">
+          <span>${apply.name}</span>
+        </div>
+      `;
+    });
+  }
   initializeDeleteButtonsEvent();
   editApplicationEvent();
 }
 
-const delPageButton = document.querySelector(".del-page");
 export function handlePageButtonClick() {
   const addPageButton = document.querySelector(".add-page");
-  addPageButton.addEventListener("click", () => {
-    addNewPage();
-    changePage("increment");
+  const delPageButton = document.querySelector(".del-page");
+  addPageButton.addEventListener("click", async (event) => {
+    event.preventDefault();
+    await addNewPage();
     showListApplication();
-    updateNumberFooter();
   });
 
-  delPageButton.addEventListener("click", () => {
-    if (totalPages > 1) {
-      delPage();
-      changePage("decrement");
+  delPageButton.addEventListener("click", async () => {
+   
+    const deleted = await delPage(getCurrentPageFromQueryParams());
+    if (deleted) {
+      // currentPagee = deleted.id;
+      updateQueryParam(deleted.id);
       showListApplication();
-      updateNumberFooter();
     }
   });
 }
@@ -52,31 +58,45 @@ export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
 
-  btnNext.addEventListener("click", () => {
-    changePage("increment");
+  btnNext.addEventListener("click", async () => {
+    await changePage("increment");
     showListApplication();
-    updateNumberFooter();
+    // await updateNumberFooter();
   });
 
-  btnPrev.addEventListener("click", () => {
-    changePage("decrement");
+  btnPrev.addEventListener("click", async () => {
+    await changePage("decrement");
     showListApplication();
-    updateNumberFooter();
+    // await updateNumberFooter();
   });
 }
 
-export function updateNumberFooter() {
-  const currentpage = getCurrentPages();
-  const currentPageElement = document.getElementById("current-page");
-  if (currentPageElement) {
-    currentPageElement.textContent = currentpage + 1;
+export async function updateNumberFooter() {
+  const currentPagee = getCurrentPageFromQueryParams();
+
+  const data = await fetchPages();
+  console.log("currentPage:", currentPagee);
+  if (data.pages && data.pages.length > 0) {
+    const pageIndex = data.pages.findIndex((page) => page.id === currentPagee);
+
+    if (pageIndex !== -1) {
+      const currentPageNumber = pageIndex + 1; // Số thứ tự trang hiện tại
+      const currentPageElement = document.getElementById("current-page");
+
+      if (currentPageElement) {
+        currentPageElement.textContent = currentPageNumber.toString();
+      }
+
+      return currentPageNumber; // Trả về số thứ tự trang hiện tại
+    }
   }
+
+  return -1;
 }
 
-function handleDeleteButtonClick(delUngdung) {
+function  handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
-  deleteApply(applyId);
-  showListApplication();
+ deleteApply(applyId);
 }
 
 function initializeDeleteButtonsEvent() {
@@ -92,30 +112,28 @@ export let newData = {
   id: "",
   name: "",
   element: "",
+  pageIndex: null,
 };
 const handleEditApp = (element) => {
   const editedNameIconInput = document.getElementById("edited_name_icon");
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
   const edited_file = document.querySelector("#edited_file");
   const idCurrentEdit = parseInt(element.getAttribute("edit"));
-  allApplications.forEach((data, i) => {
-    data.forEach((item, index) => {
-      if (item.id === idCurrentEdit) {
-        editedUploadedImage.style.display = "block";
-        editedNameIconInput.value = item.name;
-        editedUploadedImage.src = item.image;
+  const appToEdit = applicationState.find((app) => app.id === idCurrentEdit)
+  if (appToEdit) {
+    editedUploadedImage.style.display = "block";
+    editedNameIconInput.value = appToEdit.name;
+    editedUploadedImage.src = appToEdit.image;
 
-        newData = {
-          id: idCurrentEdit,
-          name: item.name,
-          image: item.image,
-          element: element,
-        };
-
-        openFormEditApplication();
-      }
-    });
-  });
+    newData = {
+      id: idCurrentEdit,
+      name: appToEdit.name,
+      image: appToEdit.image,
+      element: element,
+      pageIndex: appToEdit.pageIndex,
+    };
+    openFormEditApplication();
+  }
   editedNameIconInput.addEventListener("change", (e) => {
     newData.name = e.target.value;
   });
@@ -129,12 +147,5 @@ function editApplicationEvent() {
     element?.addEventListener("click", () => {
       handleEditApp(element);
     });
-  });
-}
-
-export function loadedWeb() {
-  window.addEventListener("DOMContentLoaded", () => {
-    setCurrentPages(0);
-    updateNumberFooter();
   });
 }

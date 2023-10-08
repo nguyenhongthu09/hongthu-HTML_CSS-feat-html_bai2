@@ -1,12 +1,13 @@
 import {
   showListApplication,
-  setPageButtonEvent,handlePageButtonClick,loadedWeb,
+  setPageButtonEvent,handlePageButtonClick
 } from "./UI-controller/applicationList.js";
 import { initializeFormActions } from "./UI-controller/applicationForm.js";
+import { initializeState } from "./global/state.js";
 
 function main() {
+  initializeState();
   showListApplication();
-  loadedWeb();
   handlePageButtonClick();
   initializeFormActions();
   setPageButtonEvent();
