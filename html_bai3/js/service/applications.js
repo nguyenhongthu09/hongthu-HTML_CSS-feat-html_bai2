@@ -180,7 +180,7 @@ export async function delPage(pageId) {
       method: "DELETE",
     });
     if (response.status === 204) {
-      // Xóa trang thành công, cập nhật trạng thái cục bộ
+      // Xóa trang thành công từ API
       const deletedPageIndex = pageState.findIndex((page) => page.id === pageId);
       if (deletedPageIndex !== -1) {
         pageState.splice(deletedPageIndex, 1);
@@ -188,24 +188,6 @@ export async function delPage(pageId) {
 
       // Cập nhật giao diện
       showListApplication();
-
-      // Xóa tất cả ứng dụng có pageIndex trùng với pageId từ trạng thái cục bộ và API
-      const appsToDelete = applicationState.filter((app) => app.pageIndex === pageId);
-      for (const app of appsToDelete) {
-        // Gửi yêu cầu DELETE cho mỗi ứng dụng
-        const appResponse = await fetch(`${API_URL}/applications/${app.id}`, {
-          method: "DELETE",
-        });
-        if (appResponse.status === 204) {
-          // Xóa ứng dụng thành công từ trạng thái cục bộ
-          const deletedAppIndex = applicationState.findIndex((a) => a.id === app.id);
-          if (deletedAppIndex !== -1) {
-            applicationState.splice(deletedAppIndex, 1);
-          }
-        } else {
-          console.error(`Lỗi khi xóa ứng dụng ${app.id}`);
-        }
-      }
 
       return true;
     }
