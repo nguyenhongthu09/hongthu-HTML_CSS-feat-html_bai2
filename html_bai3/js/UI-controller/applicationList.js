@@ -1,17 +1,18 @@
 import { allApplications } from "../data/application.js";
 import { openFormEditApplication } from "./applicationForm.js";
-import {  updateQueryParam } from "../service/applications.js";
+import { updateQueryParam } from "../service/applications.js";
 import {
   changePage,
   deleteApply,
   delPage,
   addNewPage,
   getCurrentPageFromQueryParams,
-  fetchPages,currentPagee 
+  fetchPages,
+  currentPagee,
 } from "../service/applications.js";
 import { pageState, applicationState } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
- 
+
 export async function showListApplication() {
   cart.innerHTML = "";
   const currentPageData = pageState.find((page) => page.id === currentPagee);
@@ -44,16 +45,38 @@ export function handlePageButtonClick() {
   });
 
   delPageButton.addEventListener("click", async () => {
-   
-    const deleted = await delPage(getCurrentPageFromQueryParams());
+    const currentPageId = getCurrentPageFromQueryParams();
+    const deleted = await delPage(currentPageId);
+
     if (deleted) {
-      // currentPagee = deleted.id;
-      updateQueryParam(deleted.id);
-      showListApplication();
+      let nextPageId = null;
+
+      const deletedPageIndex = pageState.findIndex(
+        (page) => page.id === currentPageId
+      );
+
+      if (deletedPageIndex !== -1) {
+        pageState.splice(deletedPageIndex, 1);
+
+        if (pageState.length > 0) {
+          if (deletedPageIndex > 0) {
+            nextPageId = pageState[deletedPageIndex - 1].id;
+          } else {
+            nextPageId = pageState[1].id;
+          }
+        }
+
+        showListApplication(nextPageId);
+      }
     }
   });
 }
-
+function deletePageFromUI(pageId) {
+  const deletedPageIndex = pageState.findIndex((page) => page.id === pageId);
+  if (deletedPageIndex !== -1) {
+    pageState.splice(deletedPageIndex, 1);
+  }
+}
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
@@ -80,23 +103,23 @@ export async function updateNumberFooter() {
     const pageIndex = data.pages.findIndex((page) => page.id === currentPagee);
 
     if (pageIndex !== -1) {
-      const currentPageNumber = pageIndex + 1; // Số thứ tự trang hiện tại
+      const currentPageNumber = pageIndex + 1; 
       const currentPageElement = document.getElementById("current-page");
 
       if (currentPageElement) {
         currentPageElement.textContent = currentPageNumber.toString();
       }
 
-      return currentPageNumber; // Trả về số thứ tự trang hiện tại
+      return currentPageNumber; 
     }
   }
 
   return -1;
 }
 
-function  handleDeleteButtonClick(delUngdung) {
+function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
- deleteApply(applyId);
+  deleteApply(applyId);
 }
 
 function initializeDeleteButtonsEvent() {
@@ -119,7 +142,7 @@ const handleEditApp = (element) => {
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
   const edited_file = document.querySelector("#edited_file");
   const idCurrentEdit = parseInt(element.getAttribute("edit"));
-  const appToEdit = applicationState.find((app) => app.id === idCurrentEdit)
+  const appToEdit = applicationState.find((app) => app.id === idCurrentEdit);
   if (appToEdit) {
     editedUploadedImage.style.display = "block";
     editedNameIconInput.value = appToEdit.name;

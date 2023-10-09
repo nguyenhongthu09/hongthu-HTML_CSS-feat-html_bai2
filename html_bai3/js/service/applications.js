@@ -1,19 +1,15 @@
-
 import { API_URL } from "../data/api.js";
 import { pageState, applicationState } from "../global/state.js";
 import { showListApplication } from "../UI-controller/applicationList.js";
 
-
-export  function deleteApply(applyId) {
-    fetch(`${API_URL}/applications/${applyId}`, {
+export function deleteApply(applyId) {
+  fetch(`${API_URL}/applications/${applyId}`, {
     method: "DELETE",
   })
     .then((response) => {
       if (response.ok) {
-      
         showListApplication();
       } else {
-        
         console.error("Xóa ứng dụng không thành công.");
       }
     })
@@ -21,9 +17,6 @@ export  function deleteApply(applyId) {
       console.error("Lỗi kết nối đến API: " + error);
     });
 }
-
-
-
 
 function calculateCurrentId() {
   let maxId = 0;
@@ -67,18 +60,16 @@ export async function addApplicationToCustomPage(application, pageIndex) {
 
 /// UPDATE
 
-
 export function updateData(id, newName, newImage, pageIndex) {
   fetch(`${API_URL}/applications/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ name: newName, image: newImage, pageIndex}),
+    body: JSON.stringify({ name: newName, image: newImage, pageIndex }),
   })
     .then((response) => {
       if (response.ok) {
-        // Cập nhật trạng thái cục bộ của ứng dụng với dữ liệu mới từ API
         return response.json();
       } else {
         console.error("Cập nhật ứng dụng không thành công.");
@@ -86,14 +77,12 @@ export function updateData(id, newName, newImage, pageIndex) {
       }
     })
     .then((updatedData) => {
-      // Cập nhật trạng thái cục bộ của ứng dụng với dữ liệu mới từ API
       const appIndex = applicationState.findIndex((app) => app.id === id);
       if (appIndex !== -1) {
-
         applicationState[appIndex].name = updateData.name;
         applicationState[appIndex].image = updateData.image;
         applicationState[appIndex].pageIndex = pageIndex;
-        // Cập nhật giao diện
+
         showListApplication();
       }
     })
@@ -101,12 +90,6 @@ export function updateData(id, newName, newImage, pageIndex) {
       console.error("Lỗi kết nối đến API: " + error);
     });
 }
-
-
-
-
-
-
 
 export function updateCurrentPage(newPage) {
   currentPagee = newPage;
@@ -175,26 +158,9 @@ export async function addNewPage() {
 }
 
 export async function delPage(pageId) {
-  try {
-    const response = await fetch(`${API_URL}/pages/${pageId}`, {
-      method: "DELETE",
-    });
-    if (response.status === 204) {
-      // Xóa trang thành công từ API
-      const deletedPageIndex = pageState.findIndex((page) => page.id === pageId);
-      if (deletedPageIndex !== -1) {
-        pageState.splice(deletedPageIndex, 1);
-      }
-
-      // Cập nhật giao diện
-      showListApplication();
-
-      return true;
-    }
-  } catch (error) {
-    console.error("Lỗi khi gửi DELETE request:", error);
-  }
-  return false;
+  await fetch(`${API_URL}/pages/${pageId}`, {
+    method: "DELETE",
+  });
 }
 
 export async function fetchPages() {
