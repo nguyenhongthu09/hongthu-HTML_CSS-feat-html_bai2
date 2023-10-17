@@ -94,36 +94,61 @@ export function updateData(id, newName, newImage, pageIndex) {
 export function updateCurrentPage(newPage) {
   currentPagee = newPage;
   updateQueryParam(currentPagee);
+  showListApplication();
 }
 
 //CHANGE PAGE
 
 export let currentPagee = getCurrentPageFromQueryParams();
 
+// export async function changePage(action) {
+//   const maxPage = (await fetchPages()).length;
+//   if (action === "increment") {
+//     if (currentPagee < maxPage) {
+//       currentPagee++;
+//     }
+//   } else if (action === "decrement") {
+//     if (currentPagee > 1) {
+//       currentPagee--;
+//     }
+//   }
+
+//   updateQueryParam(currentPagee);
+// }
+
 export async function changePage(action) {
   const maxPage = (await fetchPages()).length;
+  let newPage = getCurrentPageFromQueryParams(); // Lấy trang hiện tại từ URL
+
   if (action === "increment") {
-    if (currentPagee < maxPage) {
-      currentPagee++;
+    if (newPage < maxPage) {
+      newPage++;
     }
   } else if (action === "decrement") {
-    if (currentPagee > 1) {
-      currentPagee--;
+    if (newPage > 1) {
+      newPage--;
     }
   }
 
-  updateQueryParam(currentPagee);
+  updateQueryParam(newPage); // Cập nhật tham số trên URL
+  currentPagee = newPage; // Cập nhật biến currentPagee
+
+  // Thực hiện các hành động cập nhật giao diện tại đây (nếu cần)
 }
+
 
 export function updateQueryParam(page) {
   const url = new URL(window.location.href);
   url.searchParams.set("pages", page);
   window.history.replaceState({}, "", url);
 }
+
 export function getCurrentPageFromQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
   const currentPagee = urlParams.get("pages");
+  console.log(currentPagee, "currentpage");
   return parseInt(currentPagee, 10) || 1;
+  
 }
 
 //ADD PAGE
@@ -161,7 +186,99 @@ export async function delPage(pageId) {
   await fetch(`${API_URL}/pages/${pageId}`, {
     method: "DELETE",
   });
+  return pageId;
 }
+// export async function delPage(pageId) {
+//   const confirmed = confirm(`Bạn có chắc chắn muốn xóa trang "${pageId}" không?`);
+
+//   if (confirmed) {
+//     try {
+//       const currentpage = pageState.find((page) => page.id === pageId)
+//       const response = await fetch(`${API_URL}/pages/${pageId}`, {
+//         method: "PUT",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({...currentpage,isDelete: true}),
+//       });
+
+//       if (response.ok) {
+//         // Yêu cầu xóa thành công, cập nhật lại trạng thái
+//         pageState = pageState.filter((page) => page.id !== pageId);
+//         if (pageState.length > 0) {
+//           const currentPageIndex = pageState.findIndex((page) => page.id === pageId);
+//           if (currentPageIndex === 0) {
+//             // Nếu trang đầu tiên được xóa, chọn trang thứ hai trong mảng
+//             return pageState[1].id;
+//           } else {
+//             // Nếu không phải trang đầu tiên, chọn trang trước đó trong mảng
+//             return pageState[currentPageIndex - 1].id;
+//           }
+//         } else {
+//           // Nếu không còn trang nào, chuyển về trang mặc định (trang đầu tiên)
+//           return 1;
+//         }
+//       } else {
+//         console.error("Lỗi khi xóa trang. Không thể xóa.");
+        
+//         return ;
+//       }
+//     } catch (error) {
+//       console.error("Lỗi khi xóa trang:", error);
+//       return ;
+//     }
+//   } else {
+//     return ; // Trả về false nếu người dùng hủy xóa
+//   }
+// }
+
+// export async function delPage(pageId) {
+//   const confirmed = confirm(`Bạn có chắc chắn muốn xóa trang "${pageId}" không?`);
+
+//   if (confirmed) {
+//     try {
+//       // Tìm trang cần xóa trong danh sách
+//       const currentPageIndex = pageState.findIndex((page) => page.id === pageId);
+//       if (currentPageIndex === -1) {
+//         console.error("Không tìm thấy trang để xóa.");
+//         return;
+//       }
+
+//       // Cập nhật trạng thái xóa trang và gửi lên server
+//       pageState[currentPageIndex].isDelete = true;
+//       const response = await fetch(`${API_URL}/pages/${pageId}`, {
+//         method: "DELETE",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(pageState[currentPageIndex]),
+//       });
+
+//       if (response.ok) {
+//         // Yêu cầu xóa thành công, loại bỏ trang khỏi danh sách
+//         pageState = pageState.filter((page) => page.id !== pageId);
+        
+//         if (pageState.length > 0) {
+//           // Nếu vẫn còn trang, chọn trang tiếp theo hoặc trang trước đó trong danh sách
+//           const nextPageIndex = Math.min(currentPageIndex, pageState.length - 1);
+//           return pageState[nextPageIndex].id;
+//         } else {
+//           // Nếu không còn trang nào, chuyển về trang mặc định (trang đầu tiên)
+//           return 1;
+//         }
+//       } else {
+//         console.error("Lỗi khi xóa trang. Không thể xóa.");
+//         return;
+//       }
+//     } catch (error) {
+//       console.error("Lỗi khi xóa trang:", error);
+//       return;
+//     }
+//   } else {
+//     return; // Trả về false nếu người dùng hủy xóa
+//   }
+// }
+
 
 export async function fetchPages() {
   try {
@@ -170,8 +287,10 @@ export async function fetchPages() {
     });
     if (response.status === 200) {
       const pagesData = await response.json();
-
-      return pagesData;
+      const a = pagesData.filter(page => page.isDelete === false);
+      // return pagesData.filter(page => page.isDelete === false);
+      console.log("getpage", a);
+      return a
     }
   } catch (error) {
     console.error("Lỗi khi gửi GET request cho Pages:", error);
@@ -185,8 +304,10 @@ export async function fetchApplicationsss() {
     });
     if (response.status === 200) {
       const applicationsData = await response.json();
-
-      return applicationsData;
+          const b = applicationsData.filter(application => application.isDelete === false);
+          console.log("getapplication",b);
+          return b;
+      // return applicationsData.filter(application => application.isDelete === false);
     }
   } catch (error) {
     console.error("Lỗi khi gửi GET request cho Applications:", error);

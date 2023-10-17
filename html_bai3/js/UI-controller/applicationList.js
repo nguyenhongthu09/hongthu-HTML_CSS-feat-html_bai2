@@ -1,6 +1,4 @@
-import { allApplications } from "../data/application.js";
 import { openFormEditApplication } from "./applicationForm.js";
-import { updateQueryParam } from "../service/applications.js";
 import {
   changePage,
   deleteApply,
@@ -9,18 +7,18 @@ import {
   getCurrentPageFromQueryParams,
   fetchPages,
   currentPagee,
+  updateQueryParam,updateCurrentPage,
 } from "../service/applications.js";
-import { pageState, applicationState } from "../global/state.js";
+import { pageState, applicationState, initializeState } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
 
 export async function showListApplication() {
   cart.innerHTML = "";
-  const currentPageData = pageState.find((page) => page.id === currentPagee);
+  const currentPageData = pageState.find((page) => page.id === currentPagee && page.isDelete === false);
 
   if (currentPageData) {
     const filteredApplications = applicationState.filter(
-      (apply) => apply.pageIndex === currentPageData.id
-    );
+      (apply) => apply.pageIndex === currentPageData.id);
     filteredApplications.forEach((apply) => {
       cart.innerHTML += `
         <div class="items-apply" edit="${apply.id}">
@@ -37,46 +35,37 @@ export async function showListApplication() {
 
 export function handlePageButtonClick() {
   const addPageButton = document.querySelector(".add-page");
-  const delPageButton = document.querySelector(".del-page");
+  const delPageButton = document.getElementById("xoapage");
   addPageButton.addEventListener("click", async (event) => {
     event.preventDefault();
     await addNewPage();
+    updatePageNumberOnFooter();
     showListApplication();
   });
 
   delPageButton.addEventListener("click", async () => {
-    const currentPageId = getCurrentPageFromQueryParams();
-    const deleted = await delPage(currentPageId);
-
-    if (deleted) {
-      let nextPageId = null;
-
-      const deletedPageIndex = pageState.findIndex(
-        (page) => page.id === currentPageId
-      );
-
-      if (deletedPageIndex !== -1) {
-        pageState.splice(deletedPageIndex, 1);
-
-        if (pageState.length > 0) {
-          if (deletedPageIndex > 0) {
-            nextPageId = pageState[deletedPageIndex - 1].id;
-          } else {
-            nextPageId = pageState[1].id;
-          }
-        }
-
-        showListApplication(nextPageId);
-      }
+    const currentPage = getCurrentPageFromQueryParams();
+    const pageToDelete = pageState.find((page) => page.id === currentPage);
+  
+    if (!pageToDelete) {
+      console.error("Không tìm thấy trang để xóa.");
+      return;
+    }
+  
+    const deleteSuccess = await delPage(pageToDelete.id, currentPage);
+  
+    if (deleteSuccess) {
+      // Cập nhật URL và giao diện với trang mới
+      updateQueryParam(deleteSuccess);
+      showListApplication(deleteSuccess);
     }
   });
+
 }
-function deletePageFromUI(pageId) {
-  const deletedPageIndex = pageState.findIndex((page) => page.id === pageId);
-  if (deletedPageIndex !== -1) {
-    pageState.splice(deletedPageIndex, 1);
-  }
-}
+
+
+
+
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
@@ -84,38 +73,25 @@ export function setPageButtonEvent() {
   btnNext.addEventListener("click", async () => {
     await changePage("increment");
     showListApplication();
-    // await updateNumberFooter();
+    updatePageNumberOnFooter();
   });
 
   btnPrev.addEventListener("click", async () => {
     await changePage("decrement");
     showListApplication();
-    // await updateNumberFooter();
+    updatePageNumberOnFooter();
   });
 }
 
-export async function updateNumberFooter() {
-  const currentPagee = getCurrentPageFromQueryParams();
-
-  const data = await fetchPages();
-  console.log("currentPage:", currentPagee);
-  if (data.pages && data.pages.length > 0) {
-    const pageIndex = data.pages.findIndex((page) => page.id === currentPagee);
-
-    if (pageIndex !== -1) {
-      const currentPageNumber = pageIndex + 1; 
-      const currentPageElement = document.getElementById("current-page");
-
-      if (currentPageElement) {
-        currentPageElement.textContent = currentPageNumber.toString();
-      }
-
-      return currentPageNumber; 
-    }
+function updatePageNumberOnFooter() {
+  const currentPageElement = document.getElementById("current-page");
+  const currentPage = getCurrentPageFromQueryParams();
+  if (currentPageElement !== null && !isNaN(currentPage)) {
+    currentPageElement.textContent = currentPage.toString();
   }
-
-  return -1;
 }
+updatePageNumberOnFooter();
+
 
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));

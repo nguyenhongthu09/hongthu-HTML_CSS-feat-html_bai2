@@ -1,6 +1,6 @@
 import {
   showListApplication,
-  setPageButtonEvent,handlePageButtonClick
+  setPageButtonEvent,handlePageButtonClick,
 } from "./UI-controller/applicationList.js";
 import { initializeFormActions } from "./UI-controller/applicationForm.js";
 import { initializeState } from "./global/state.js";

@@ -10,6 +10,7 @@ export async function initializeState() {
     pageState = pagesData;
     applicationState = applicationsData;
     showListApplication();
+    console.log("pagestate",pageState);
     
   } catch (error) {
     console.error('Lỗi khi khởi tạo trạng thái:', error);

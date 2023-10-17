@@ -204,7 +204,7 @@
         height: 100%;
         object-fit: contain;
     }
-    #boxItems {
+    #form_edit_ud {
         position: absolute;
         z-index: 1;
         top: 50%;
@@ -221,8 +221,10 @@
     }
     
     .form_edit_ud_name,
-    .form_edit_ud_upfile {
+    .form_edit_ud_upfile,
+    #btnEditSubmit {
         margin-bottom: 10px;
+        margin-left: 10px;
     }
     .number-page {
         position: fixed;

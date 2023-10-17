@@ -2,29 +2,32 @@ import { getCurrentPageFromQueryParams,addApplicationToCustomPage  } from "../se
 import { showListApplication } from "./applicationList.js";
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
-  const boxItems = document.getElementById("boxItems");
-  const boxItem = document.querySelector(".form-add-ungdung");
+  const boxItems = document.getElementById("form_edit_ud");
   var nameError = document.getElementById("name_error");
   const uploadedImage = document.getElementById("uploadedImage");
+  const submitForm = document.getElementById("form_add_ud");
   return {
     overlay,
     boxItems,
-    boxItem,
+   submitForm,
     nameError,
     uploadedImage,
+    
   };
 }
 
 export function initializeFormActions() {
   const addButton = document.querySelector(".icon-btn-add");
   const cancelButton = document.getElementById("btn-cancel");
-
+  const submitForm = document.getElementById("form_add_ud");
   addButton.addEventListener("click", () => {
-    const { boxItem, overlay } = getDOMForms();
-    boxItem.style.display = "block";
+    const {  overlay  } = getDOMForms();
+    submitForm.style.display = "block";
     overlay.style.display = "block";
   });
-  btnSubmit.addEventListener("click", () => {
+  submitForm.addEventListener("submit", (event) => {
+    console.log("okok");
+    event.preventDefault();
     var nameInput = document.getElementById("name_icon");
     const uploadedImage = document.getElementById("uploadedImage");
     if (!nameInput.value) {
@@ -41,7 +44,7 @@ export function initializeFormActions() {
         name: name,
         image: image,
       };
-      // addApplicationToPage(pageIndex, newApplication);
+    
       addApplicationToCustomPage(newApplication , pageIndex);
     }
     showListApplication();
@@ -52,11 +55,11 @@ export function initializeFormActions() {
   });
 
   cancelButton.addEventListener("click", () => {
-    const { boxItem, overlay, uploadedImage } = getDOMForms();
-    boxItem.style.display = "none";
+    const {  overlay, uploadedImage } = getDOMForms();
+    submitForm.style.display = "none";
     overlay.style.display = "none";
     uploadedImage.style.display = "none";
-    boxItem.reset();
+    submitForm.reset();
   });
   uploadFileImg();
 }
@@ -109,7 +112,8 @@ export function openFormEditApplication() {
   overlay.style.display = "block";
   uploadedImageEdit();
 
-  btnEditSubmit.addEventListener("click", () => {
+  boxItems.addEventListener("submit", (event) => {
+    event.preventDefault();
     let element = newData.element;
     element.children[element.children.length - 1].innerText = newData.name;
     element.children[element.children.length - 2].src = newData.image;
@@ -128,14 +132,14 @@ export function openFormEditApplication() {
   });
 }
 export function openFormAddApplication() {
-  const { boxItem, overlay, nameError } = getDOMForms();
+  const { submitForm, overlay, nameError } = getDOMForms();
   nameError.style.display = "block";
-  boxItem.style.display = "block";
+  submitForm.style.display = "block";
   overlay.style.display = "block";
 }
 export function closeFormAddApplication() {
-  const { boxItem, overlay, nameError } = getDOMForms();
+  const { submitForm, overlay, nameError } = getDOMForms();
   nameError.style.display = "none";
-  boxItem.style.display = "none";
+  submitForm.style.display = "none";
   overlay.style.display = "none";
 }
