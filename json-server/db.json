@@ -1,6 +1,11 @@
 {
   "pages": [
     {
+      "id": 1,
+      "name": "1",
+      "isDelete": false
+    },
+    {
       "id": 2,
       "name": "2",
       "isDelete": false
@@ -20,50 +25,55 @@
       "id": 1,
       "name": "Cococ",
       "image": "./img/googleplus_icon.png",
-      "pageIndex": 1,
-      "isDelete": false
+      "pageIndex": 1
     },
     {
       "id": 2,
       "name": "Chrom",
       "image": "./img/gg.png",
-      "pageIndex": 1,
-      "isDelete": false
+      "pageIndex": 1
     },
     {
       "id": 3,
       "name": "Cài đặt",
       "image": "./img/vimeo_icon.png",
-      "pageIndex": 1,
-      "isDelete": false
+      "pageIndex": 1
     },
     {
       "id": 4,
       "name": "Điện thoại",
       "image": "./img/skype_icon.png",
-      "pageIndex": 2,
-      "isDelete": false
+      "pageIndex": 2
     },
     {
       "id": 5,
       "name": "Lịch",
       "image": "./img/linkedin_icon.png",
-      "pageIndex": 2,
-      "isDelete": false
+      "pageIndex": 2
     },
     {
       "id": 6,
       "name": "Facebook",
       "image": "./img/pinterest_icon.png",
-      "pageIndex": 3,
-      "isDelete": false
+      "pageIndex": 3
     },
     {
       "id": 7,
       "name": "Slack",
       "image": "./img/stumbleupon_icon.png",
-      "pageIndex": 3,
-      "isDelete": false
+      "pageIndex": 3
+    },
+    {
+      "id": 8,
+      "name": "Slack",
+      "image": "./img/stumbleupon_icon.png",
+      "pageIndex": 4
+    },
+    {
+      "id": 9,
+      "name": "IG",
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE2ElEQVRogdVaTYwURRSuQeGIRkQB9aBg5EAiiRHB6MGjBwMqC3gy8rNRCBqCP9vVvfbBRBOD4t9RUP4uJCRc3KzsVBXDgRgFhBM//hEWPRiUBDloosHvverd2Znumu6e7Z4eXlKZ2e7qN++revXe916vEEVIaOYJX71Qk+qjmq9Ga74+j88/8fdVHvTdXhulOcIz6/iZSmVobA6M3gqjvsP4BeML4esNuL5ChF/fFZvv1e/G/MeFNBsB4sua1BcxviUdrKtnEpp7eaWl/hVGfyyG9SNd6xoeexQ78yn0/AZ9H4rwyIICLW2T8OAsrNYQfvCykMoT4cjswnS/NXYbdk9iYcah+w0xeGJmYbpZAvUQVug0u0mSexQlcDMs0B4AOSWCow8Wo1Tq56HwkpD1Z4tRmEECs5p3IzCrpqdI1l+m6AHXWViMZTkEOwAQF7CAg90pIOPhNhw9qhKEWizgmfwgAvUcr3yVxk8IgbA7sTLbA3xg4fNVuI1LrDuNiyGzqPNEhEp2G9eBHTh4C69EoLYhIS0vwVS3+GoAXnGyc4jlOI9QmSShuRUKNMaNySH1OyWZmyiwbR9sfD35rqzfw9vkHZubeN/XL7YYbwH8BxrwQIk2twrlCU52jfmxe0yyKMM6BMa+FwOAAeBPl2p0u/gqwE7saL0YmjuJ23BKdwkltPgO/FMuf0mQ0NzOtrYQQKlfZWLWUW7UmEVONb7rJDM9gR2fwaW3NC+AEmdmlYF6mKOU37ivLANTZVg/BhDf2D9sovi5MmO6FM5VTCypkvL1rqoNyivEWoWn1gj2faqk0h6Qejce+rt9TE3xmKNw7af2gaS3lCfQijHv1w0uiLCK+P3vMWdn7mDgq038HNWpXAamAlD7E8MoeNOUOReSQy2yNpWSvrqWdD8aV3C2lmUHYJ7AInxFq/YjhdEyAeA3DnUwvBWE37g/EwDsJpM8fog4TpkAcg11OBsAojbqd/rRq1nmFwTgOnbjj5Q5/2YtW9n2HgHAYVfrJ3eauxHqrAsEDuhL2QH0xoV2xhRa8viXY/67qdZPupCvfnAy0IIAuAhfCzVpOfTq83QAk4cYYZQ6ZqUCcBQ/vn7TcZD3pQLw6k9GYZRotNlYCYBAv9Y1ABBJ7uZZKuGowvoYAIzfS2VmROb0xZsPAMjcxNnlLjFC200DAPow73jzgm2Tdyxo+gmALWjUK80rKM/SSsq+ATBRUoajd7QaSMkGVLfvAfj6bcx5PwHZkQU16v072ol9AUA25nNbxfl6ihILhac+BYB7B7gr6JTBEzPtywWzOo4ehbzUYWx4ZvGUBVjLnYr24WKXnlmSON+rPxWbC93cfAAHcgPgVYkaqYW9ISlAbMN5PHvDOTCrmChV/ipUWL8nwinrz+R8EFyDXi5UCYKNpxcc6VzNoYAIE3aiCncit+GV79b4CZF6ZeR/A8VYlkHowHIXOq/buGTILMJWnuTwVqZLWZc5wNGm8DdE9GbE09uj3Qg6drLzCuhBlGEvc5xPDZXTEZsNP7CdNf1JrmZUTBdYJYhZ9G8LO3obMIhM+XoLdYlti1DvoXYfdcyYjoThjOZcfCfjUAZySxDZPnrmOM7Y5hgx67lQpvXUGirxYNQIPs/h80rz323oO18bod3jgJChG5hF/gfOWqMUN9EXnwAAAABJRU5ErkJggg==",
+      "pageIndex": 4
     }
   ]
 }
