@@ -93,23 +93,23 @@ export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
   btnNext.addEventListener("click", async () => {
-    let s = getCurrentPageFromQueryParams();
-    if(s >= state.pageState.length){
+    let current = getCurrentPageFromQueryParams();
+    if(current >= state.pageState.length){
       return;
     }
-    showListApplication(s + 1);
-    updateQueryParam(s + 1);
+    showListApplication(current + 1);
+    updateQueryParam(current + 1);
     // updatePageNumberOnFooter();
   });
 
   btnPrev.addEventListener("click", async () => {
 
-    let s = getCurrentPageFromQueryParams();
-    if(s <= 1){
+    let current = getCurrentPageFromQueryParams();
+    if(current <= 1){
       return;
     }
-    showListApplication(s - 1);
-    updateQueryParam(s - 1);
+    showListApplication(current - 1);
+    updateQueryParam(current - 1);
     // updatePageNumberOnFooter();
   });
 }
