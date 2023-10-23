@@ -125,6 +125,7 @@ export function openFormEditApplication() {
     newData.pageIndex = null;
 
     closeFormEditApplication();
+   
   });
 
   btnEditCancel.addEventListener("click", () => {

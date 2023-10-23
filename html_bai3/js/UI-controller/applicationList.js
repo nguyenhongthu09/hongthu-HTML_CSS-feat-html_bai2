@@ -1,34 +1,41 @@
 import { openFormEditApplication } from "./applicationForm.js";
 import {
-  changePage,
   deleteApply,
   delPage,
   addNewPage,
   getCurrentPageFromQueryParams,
-  fetchPages,
   currentPagee,
-  updateQueryParam,updateCurrentPage,
+  updateQueryParam,
 } from "../service/applications.js";
-import { pageState, applicationState, initializeState } from "../global/state.js";
+import { state } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
 
-export async function showListApplication() {
-  cart.innerHTML = "";
-  const currentPageData = pageState.find((page) => page.id === currentPagee && page.isDelete === false);
+export async function showListApplication(pageIndex) {
+
+  const currentPageData = state.pageState.find((page) => {
+    if (pageIndex) {
+      return page.id === pageIndex;
+    }
+    return page.id === currentPagee;
+  });
 
   if (currentPageData) {
-    const filteredApplications = applicationState.filter(
-      (apply) => apply.pageIndex === currentPageData.id);
-    filteredApplications.forEach((apply) => {
-      cart.innerHTML += `
-        <div class="items-apply" edit="${apply.id}">
-          <button class="btn-del" apply_id="${apply.id}">-</button>
-          <img src="${apply.image}" alt="">
-          <span>${apply.name}</span>
-        </div>
-      `;
-    });
+    const filteredApplications = state.applicationState.filter(
+      (apply) => apply.pageIndex === currentPageData.id
+    );
+    cart.innerHTML = filteredApplications
+      .map((apply) => {
+        return `
+     <div class="items-apply" edit="${apply.id}">
+       <button class="btn-del" apply_id="${apply.id}">-</button>
+       <img src="${apply.image}" alt="">
+       <span>${apply.name}</span>
+     </div>
+   `;
+      })
+      .join(" ");
   }
+  // updatePageNumberOnFooter();
   initializeDeleteButtonsEvent();
   editApplicationEvent();
 }
@@ -39,63 +46,100 @@ export function handlePageButtonClick() {
   addPageButton.addEventListener("click", async (event) => {
     event.preventDefault();
     await addNewPage();
-    updatePageNumberOnFooter();
+    // updatePageNumberOnFooter();
     showListApplication();
   });
 
   delPageButton.addEventListener("click", async () => {
-    const currentPage = getCurrentPageFromQueryParams();
-    const pageToDelete = pageState.find((page) => page.id === currentPage);
-  
+    let currentPage = getCurrentPageFromQueryParams();
+    const pageToDelete = state.pageState.find(
+      (page) => page.id === currentPage
+    );
     if (!pageToDelete) {
       console.error("Không tìm thấy trang để xóa.");
       return;
     }
-  
-    const deleteSuccess = await delPage(pageToDelete.id, currentPage);
-  
+    if(state.pageState.length === 1) {
+      return;
+    }
+    const deleteSuccess = await delPage(pageToDelete.id);
+
     if (deleteSuccess) {
-      // Cập nhật URL và giao diện với trang mới
-      updateQueryParam(deleteSuccess);
-      showListApplication(deleteSuccess);
+      const pageIndexToDelete = state.pageState.findIndex(
+        (page) => page.id === pageToDelete.id
+      );
+      console.log(pageIndexToDelete, "chi muc trang vua xoa");
+      if (pageIndexToDelete !== -1) {
+        state.pageState.splice(pageIndexToDelete, 1);
+        console.log("xoa trang thanh cong", state.pageState);
+      }
+  
+      let newPage = currentPage;
+    if (pageIndexToDelete === state.pageState.length) {
+      newPage = currentPage - 1;
+    } else {
+      newPage = currentPage + 1;
+    }
+
+    showListApplication(newPage);
+    updateQueryParam(newPage);
+    } else {
+      console.error("Lỗi xóa trang.");
     }
   });
-
 }
-
-
-
 
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
-
   btnNext.addEventListener("click", async () => {
-    await changePage("increment");
-    showListApplication();
-    updatePageNumberOnFooter();
+    let s = getCurrentPageFromQueryParams();
+    if(s >= state.pageState.length){
+      return;
+    }
+    showListApplication(s + 1);
+    updateQueryParam(s + 1);
+    // updatePageNumberOnFooter();
   });
 
   btnPrev.addEventListener("click", async () => {
-    await changePage("decrement");
-    showListApplication();
-    updatePageNumberOnFooter();
+
+    let s = getCurrentPageFromQueryParams();
+    if(s <= 1){
+      return;
+    }
+    showListApplication(s - 1);
+    updateQueryParam(s - 1);
+    // updatePageNumberOnFooter();
   });
 }
 
-function updatePageNumberOnFooter() {
-  const currentPageElement = document.getElementById("current-page");
-  const currentPage = getCurrentPageFromQueryParams();
-  if (currentPageElement !== null && !isNaN(currentPage)) {
-    currentPageElement.textContent = currentPage.toString();
-  }
-}
-updatePageNumberOnFooter();
-
+// function updatePageNumberOnFooter() {
+//   const currentPageElement = document.getElementById("current-page");
+//   const currentPage = getCurrentPageFromQueryParams();
+//   if (currentPageElement !== null && !isNaN(currentPage)) {
+//     currentPageElement.textContent = currentPage.toString();
+//   }
+// }
+// updatePageNumberOnFooter();
+// async function updatePageNumberOnFooter() {
+//   const currentPageElement = document.getElementById("current-page");
+//   const pages = await fetchPages();
+//   const currentPageId = getCurrentPageFromQueryParams();
+//   const currentPageData = pages.find((page) => page.id === currentPageId);
+//   if (currentPageData) {
+//     currentPageElement.textContent = currentPageData.id;
+//     updateQueryParam(currentPageData.id);
+//   }
+//   // currentPageElement.textContent = `${pages[0].name}`;
+//   // updateQueryParam(pages[0].id);
+// }
+// updatePageNumberOnFooter();
 
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
   deleteApply(applyId);
+  showListApplication();
 }
 
 function initializeDeleteButtonsEvent() {
@@ -118,7 +162,7 @@ const handleEditApp = (element) => {
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
   const edited_file = document.querySelector("#edited_file");
   const idCurrentEdit = parseInt(element.getAttribute("edit"));
-  const appToEdit = applicationState.find((app) => app.id === idCurrentEdit);
+  const appToEdit = state.applicationState.find((app) => app.id === idCurrentEdit);
   if (appToEdit) {
     editedUploadedImage.style.display = "block";
     editedNameIconInput.value = appToEdit.name;
@@ -132,6 +176,7 @@ const handleEditApp = (element) => {
       pageIndex: appToEdit.pageIndex,
     };
     openFormEditApplication();
+    
   }
   editedNameIconInput.addEventListener("change", (e) => {
     newData.name = e.target.value;
@@ -145,6 +190,7 @@ function editApplicationEvent() {
   itemsApplyElements.forEach((element, index) => {
     element?.addEventListener("click", () => {
       handleEditApp(element);
+    
     });
   });
 }

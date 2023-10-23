@@ -1,16 +1,18 @@
 import { fetchApplicationsss, fetchPages } from "../service/applications.js";
 import { showListApplication } from "../UI-controller/applicationList.js";
-export let applicationState = [];
-export let pageState = [];
+// export let applicationState = [];
+export const  state = {
+  pageState: [],
+  applicationState: []
+}
 export async function initializeState() {
   try {
     const pagesData = await fetchPages();
     const applicationsData = await fetchApplicationsss();
 
-    pageState = pagesData;
-    applicationState = applicationsData;
+    state.pageState = pagesData;
+    state.applicationState = applicationsData;
     showListApplication();
-    console.log("pagestate",pageState);
     
   } catch (error) {
     console.error('Lỗi khi khởi tạo trạng thái:', error);
