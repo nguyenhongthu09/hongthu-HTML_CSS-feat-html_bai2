@@ -7,22 +7,24 @@ import {
   currentPagee,
   updateQueryParam,
 } from "../service/applications.js";
-import { state } from "../global/state.js";
+import { state, initializeState } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
 
 export async function showListApplication(pageIndex) {
 
-  const currentPageData = state.pageState.find((page) => {
-    if (pageIndex) {
-      return page.id === pageIndex;
-    }
-    return page.id === currentPagee;
-  });
+  const currentPageId = pageIndex || getCurrentPageFromQueryParams();
+      console.log(currentPageId, " current id");
+  // Tìm trang hiện tại trong mảng state.pageState
+  const currentPageData = state.pageState.find((page) => page.id === currentPageId);
 
   if (currentPageData) {
+    // Lấy thứ tự của trang hiện tại
+    const currentPageIndex = state.pageState.indexOf(currentPageData) + 1;
+
     const filteredApplications = state.applicationState.filter(
       (apply) => apply.pageIndex === currentPageData.id
     );
+    console.log(currentPageData, " currentpagedata");
     cart.innerHTML = filteredApplications
       .map((apply) => {
         return `
@@ -34,11 +36,15 @@ export async function showListApplication(pageIndex) {
    `;
       })
       .join(" ");
+
+    // Hiển thị thứ tự của trang hiện tại
+    const currentPageElement = document.getElementById("current-page");
+    currentPageElement.innerText = currentPageIndex;
   }
-  // updatePageNumberOnFooter();
   initializeDeleteButtonsEvent();
   editApplicationEvent();
 }
+let currentPage = getCurrentPageFromQueryParams();
 
 export function handlePageButtonClick() {
   const addPageButton = document.querySelector(".add-page");
@@ -46,14 +52,14 @@ export function handlePageButtonClick() {
   addPageButton.addEventListener("click", async (event) => {
     event.preventDefault();
     await addNewPage();
-    // updatePageNumberOnFooter();
+  
+    initializeStateAndPageNumber();
     showListApplication();
   });
 
   delPageButton.addEventListener("click", async () => {
-    let currentPage = getCurrentPageFromQueryParams();
-    const pageToDelete = state.pageState.find(
-      (page) => page.id === currentPage
+    // let currentPage = getCurrentPageFromQueryParams();
+    const pageToDelete = state.pageState.find( (page) => page.id === currentPage
     );
     if (!pageToDelete) {
       console.error("Không tìm thấy trang để xóa.");
@@ -80,9 +86,16 @@ export function handlePageButtonClick() {
     } else {
       newPage = currentPage + 1;
     }
-
-    showListApplication(newPage);
-    updateQueryParam(newPage);
+    if (state.pageState.find((page) => page.id === newPage)) {
+      updateQueryParam(newPage);
+      currentPage = newPage; // Cập nhật currentPage
+      showListApplication(newPage);
+      initializeStateAndPageNumber();
+    } else {
+      // Nếu không tìm thấy trang tiếp theo, thì có thể hiển thị một thông báo hoặc xử lý khác ở đây.
+      console.error("Không tìm thấy trang tiếp theo.");
+    }
+    
     } else {
       console.error("Lỗi xóa trang.");
     }
@@ -97,9 +110,11 @@ export function setPageButtonEvent() {
     if(current >= state.pageState.length){
       return;
     }
-    showListApplication(current + 1);
-    updateQueryParam(current + 1);
-    // updatePageNumberOnFooter();
+    current += 1;
+  updateQueryParam(current);
+  currentPage = current; // Cập nhật currentPage
+  showListApplication(current);
+  initializeStateAndPageNumber();
   });
 
   btnPrev.addEventListener("click", async () => {
@@ -108,33 +123,33 @@ export function setPageButtonEvent() {
     if(current <= 1){
       return;
     }
-    showListApplication(current - 1);
-    updateQueryParam(current - 1);
-    // updatePageNumberOnFooter();
+    current -= 1;
+    updateQueryParam(current);
+    currentPage = current; // Cập nhật currentPage
+    showListApplication(current);
+    initializeStateAndPageNumber();
   });
 }
 
-// function updatePageNumberOnFooter() {
-//   const currentPageElement = document.getElementById("current-page");
-//   const currentPage = getCurrentPageFromQueryParams();
-//   if (currentPageElement !== null && !isNaN(currentPage)) {
-//     currentPageElement.textContent = currentPage.toString();
-//   }
-// }
-// updatePageNumberOnFooter();
-// async function updatePageNumberOnFooter() {
-//   const currentPageElement = document.getElementById("current-page");
-//   const pages = await fetchPages();
-//   const currentPageId = getCurrentPageFromQueryParams();
-//   const currentPageData = pages.find((page) => page.id === currentPageId);
-//   if (currentPageData) {
-//     currentPageElement.textContent = currentPageData.id;
-//     updateQueryParam(currentPageData.id);
-//   }
-//   // currentPageElement.textContent = `${pages[0].name}`;
-//   // updateQueryParam(pages[0].id);
-// }
-// updatePageNumberOnFooter();
+function updateCurrentPageNumber() {
+  const currentPageElement = document.getElementById("current-page");
+  const currentPage = getCurrentPageFromQueryParams();
+  const pageIndex = state.pageState.findIndex((page) => page.id === currentPage);
+
+  if (pageIndex !== -1) {
+    
+    const pageNumber = pageIndex + 1;
+    currentPageElement.innerText = pageNumber;
+  } 
+}
+
+
+function initializeStateAndPageNumber() {
+  initializeState(); 
+  updateCurrentPageNumber(); 
+}
+
+document.addEventListener("DOMContentLoaded", initializeStateAndPageNumber);
 
 function handleDeleteButtonClick(delUngdung) {
   let applyId = parseInt(delUngdung.getAttribute("apply_id"));
