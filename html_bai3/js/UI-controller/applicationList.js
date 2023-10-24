@@ -11,14 +11,14 @@ import { state, initializeState } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
 
 export async function showListApplication(pageIndex) {
-
   const currentPageId = pageIndex || getCurrentPageFromQueryParams();
-      console.log(currentPageId, " current id");
-  // Tìm trang hiện tại trong mảng state.pageState
-  const currentPageData = state.pageState.find((page) => page.id === currentPageId);
+  console.log(currentPageId, " current id");
+
+  const currentPageData = state.pageState.find(
+    (page) => page.id === currentPageId
+  );
 
   if (currentPageData) {
-    // Lấy thứ tự của trang hiện tại
     const currentPageIndex = state.pageState.indexOf(currentPageData) + 1;
 
     const filteredApplications = state.applicationState.filter(
@@ -37,7 +37,6 @@ export async function showListApplication(pageIndex) {
       })
       .join(" ");
 
-    // Hiển thị thứ tự của trang hiện tại
     const currentPageElement = document.getElementById("current-page");
     currentPageElement.innerText = currentPageIndex;
   }
@@ -52,20 +51,21 @@ export function handlePageButtonClick() {
   addPageButton.addEventListener("click", async (event) => {
     event.preventDefault();
     await addNewPage();
-  
+
     initializeStateAndPageNumber();
     showListApplication();
   });
 
   delPageButton.addEventListener("click", async () => {
     // let currentPage = getCurrentPageFromQueryParams();
-    const pageToDelete = state.pageState.find( (page) => page.id === currentPage
+    const pageToDelete = state.pageState.find(
+      (page) => page.id === currentPage
     );
     if (!pageToDelete) {
       console.error("Không tìm thấy trang để xóa.");
       return;
     }
-    if(state.pageState.length === 1) {
+    if (state.pageState.length === 1) {
       return;
     }
     const deleteSuccess = await delPage(pageToDelete.id);
@@ -79,23 +79,22 @@ export function handlePageButtonClick() {
         state.pageState.splice(pageIndexToDelete, 1);
         console.log("xoa trang thanh cong", state.pageState);
       }
-  
+
       let newPage = currentPage;
-    if (pageIndexToDelete === state.pageState.length) {
-      newPage = currentPage - 1;
-    } else {
-      newPage = currentPage + 1;
-    }
-    if (state.pageState.find((page) => page.id === newPage)) {
-      updateQueryParam(newPage);
-      currentPage = newPage; // Cập nhật currentPage
-      showListApplication(newPage);
-      initializeStateAndPageNumber();
-    } else {
-      // Nếu không tìm thấy trang tiếp theo, thì có thể hiển thị một thông báo hoặc xử lý khác ở đây.
-      console.error("Không tìm thấy trang tiếp theo.");
-    }
-    
+      if (pageIndexToDelete === state.pageState.length) {
+        newPage = currentPage - 1;
+      } else {
+        newPage = currentPage + 1;
+      }
+      if (state.pageState.find((page) => page.id === newPage)) {
+        updateQueryParam(newPage);
+        currentPage = newPage; // Cập nhật currentPage
+        showListApplication(newPage);
+        initializeStateAndPageNumber();
+      } else {
+        // Nếu không tìm thấy trang tiếp theo, thì có thể hiển thị một thông báo hoặc xử lý khác ở đây.
+        console.error("Không tìm thấy trang tiếp theo.");
+      }
     } else {
       console.error("Lỗi xóa trang.");
     }
@@ -107,20 +106,19 @@ export function setPageButtonEvent() {
   const btnPrev = document.getElementById("prev-slider");
   btnNext.addEventListener("click", async () => {
     let current = getCurrentPageFromQueryParams();
-    if(current >= state.pageState.length){
+    if (current >= state.pageState.length) {
       return;
     }
     current += 1;
-  updateQueryParam(current);
-  currentPage = current; // Cập nhật currentPage
-  showListApplication(current);
-  initializeStateAndPageNumber();
+    updateQueryParam(current);
+    currentPage = current; // Cập nhật currentPage
+    showListApplication(current);
+    initializeStateAndPageNumber();
   });
 
   btnPrev.addEventListener("click", async () => {
-
     let current = getCurrentPageFromQueryParams();
-    if(current <= 1){
+    if (current <= 1) {
       return;
     }
     current -= 1;
@@ -134,19 +132,19 @@ export function setPageButtonEvent() {
 function updateCurrentPageNumber() {
   const currentPageElement = document.getElementById("current-page");
   const currentPage = getCurrentPageFromQueryParams();
-  const pageIndex = state.pageState.findIndex((page) => page.id === currentPage);
+  const pageIndex = state.pageState.findIndex(
+    (page) => page.id === currentPage
+  );
 
   if (pageIndex !== -1) {
-    
     const pageNumber = pageIndex + 1;
     currentPageElement.innerText = pageNumber;
-  } 
+  }
 }
 
-
 function initializeStateAndPageNumber() {
-  initializeState(); 
-  updateCurrentPageNumber(); 
+  initializeState();
+  updateCurrentPageNumber();
 }
 
 document.addEventListener("DOMContentLoaded", initializeStateAndPageNumber);
@@ -177,7 +175,9 @@ const handleEditApp = (element) => {
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
   const edited_file = document.querySelector("#edited_file");
   const idCurrentEdit = parseInt(element.getAttribute("edit"));
-  const appToEdit = state.applicationState.find((app) => app.id === idCurrentEdit);
+  const appToEdit = state.applicationState.find(
+    (app) => app.id === idCurrentEdit
+  );
   if (appToEdit) {
     editedUploadedImage.style.display = "block";
     editedNameIconInput.value = appToEdit.name;
@@ -191,7 +191,6 @@ const handleEditApp = (element) => {
       pageIndex: appToEdit.pageIndex,
     };
     openFormEditApplication();
-    
   }
   editedNameIconInput.addEventListener("change", (e) => {
     newData.name = e.target.value;
@@ -205,7 +204,6 @@ function editApplicationEvent() {
   itemsApplyElements.forEach((element, index) => {
     element?.addEventListener("click", () => {
       handleEditApp(element);
-    
     });
   });
 }
