@@ -1,6 +1,5 @@
 import { fetchApplicationsss, fetchPages } from "../service/applications.js";
 import { showListApplication } from "../UI-controller/applicationList.js";
-// export let applicationState = [];
 export const  state = {
   pageState: [],
   applicationState: []

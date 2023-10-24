@@ -101,22 +101,17 @@ export function updateCurrentPage(newPage) {
 //CHANGE PAGE
 
 export let currentPagee = getCurrentPageFromQueryParams();
-
-export async function changePage(action) {
+let currentpage = getCurrentPageFromQueryParams();
+export async function changePage() {
   const maxPage = (await fetchPages()).length;
-  let newPage = getCurrentPageFromQueryParams();
-  if (action === "increment") {
-    if (newPage < maxPage) {
-      newPage++;
-    }
-  } else if (action === "decrement") {
-    if (newPage > 1) {
-      newPage--;
-    }
+  let current = getCurrentPageFromQueryParams();
+  if (current > maxPage) {
+    current = maxPage;
   }
-
-  updateQueryParam(newPage);
-  currentPagee = newPage;
+  if (current < 1) {
+    current = 1;
+  }
+  currentpage = current;
 }
 
 export function updateQueryParam(page) {
