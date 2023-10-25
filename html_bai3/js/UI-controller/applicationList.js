@@ -10,20 +10,23 @@ import {
 import { state, initializeState } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
 
-export async function showListApplication(pageIndex )  {
+export async function showListApplication(pageIndex) {
   const currentPageId = pageIndex || getCurrentPageFromQueryParams();
   const visiblePages = state.pageState.filter((page) => !page.deleted);
 
-  const currentPageData = visiblePages.find((page) => page.id === currentPageId);
+  const currentPageData = visiblePages.find(
+    (page) => page.id === currentPageId
+  );
   // const currentPageData = state.pageState.find(
   //   (page) => page.id === currentPageId
   // );
- 
+
   if (currentPageData) {
     const currentPageIndex = state.pageState.indexOf(currentPageData) + 1;
 
     const filteredApplications = state.applicationState.filter(
-      (apply) => apply.pageIndex === currentPageData.id );
+      (apply) => apply.pageIndex === currentPageData.id
+    );
 
     cart.innerHTML = filteredApplications
       .map((apply) => {
@@ -57,7 +60,6 @@ export function handlePageButtonClick() {
 
   delPageButton.addEventListener("click", async () => {
     let currentPage = getCurrentPageFromQueryParams();
-    console.log(currentPage, " current ban dau");
     const pageToDelete = state.pageState.find(
       (page) => page.id === currentPage
     );
@@ -71,26 +73,18 @@ export function handlePageButtonClick() {
     const deleteSuccess = await delPage(pageToDelete.id);
 
     if (deleteSuccess) {
-      pageToDelete.deleted = true;
-      const pageIndexToDelete = state.pageState.findIndex(
-        (page) => page.id === pageToDelete.id
-      );
-      console.log(pageIndexToDelete, "chi muc trang vua xoa");
-      if (pageIndexToDelete !== -1) {
-        state.pageState.splice(pageIndexToDelete, 1);
-        console.log("xoa trang thanh cong", state.pageState);
+      if (currentPage === state.pageState.length) {
+        current = currentPage - 1;
+      } else {
+        current = currentPage + 1;
       }
 
-      let newPage = currentPage ;
-      if(pageIndexToDelete !== state.pageState.length){
-        newPage = currentPage - 1;
-      }
-     
-       console.log(newPage, "newpage");
-       console.log(state.pageState, "pagestate sau khi xoa xongg");
-      updateQueryParam(newPage);
-      showListApplication(newPage);
-      initializeStateAndPageNumber();
+      pageToDelete.deleted = true;
+
+      console.log(current, "current sau khi xoa");
+
+      updateQueryParam(current);
+      showListApplication(current);
     } else {
       console.error("Lỗi xóa trang.");
     }
@@ -100,9 +94,8 @@ let current = getCurrentPageFromQueryParams();
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
- 
+
   btnNext.addEventListener("click", async () => {
-   
     if (current >= state.pageState.length) {
       return;
     }
@@ -110,7 +103,6 @@ export function setPageButtonEvent() {
     updateQueryParam(current);
     console.log(current, "page tt");
     showListApplication(current);
-   
   });
 
   btnPrev.addEventListener("click", async () => {
@@ -121,10 +113,8 @@ export function setPageButtonEvent() {
     updateQueryParam(current);
     console.log(current, "page phia truoc");
     showListApplication(current);
-   
   });
 }
-
 function updateCurrentPageNumber() {
   const currentPageElement = document.getElementById("current-page");
   const currentPage = getCurrentPageFromQueryParams();
@@ -141,7 +131,6 @@ function updateCurrentPageNumber() {
 function initializeStateAndPageNumber() {
   initializeState();
   updateCurrentPageNumber();
-  
 }
 
 document.addEventListener("DOMContentLoaded", initializeStateAndPageNumber);

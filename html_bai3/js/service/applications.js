@@ -116,11 +116,14 @@ export let currentPagee = getCurrentPageFromQueryParams();
 
 export function updateQueryParam(pageId) {
   const url = new URL(window.location.href);
-  const pageExits = state.pageState.some(page => page.id === pageId);
-  if(pageExits){
+  const pageExists = state.pageState.some(page => page.id === pageId && !page.deleted);
+  if(pageExists){
   url.searchParams.set("pages", pageId);
   window.history.replaceState({}, "", url);
   }
+  
+  
+  
 }
 
 export function getCurrentPageFromQueryParams() {
