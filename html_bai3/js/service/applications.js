@@ -101,23 +101,26 @@ export function updateCurrentPage(newPage) {
 //CHANGE PAGE
 
 export let currentPagee = getCurrentPageFromQueryParams();
-let currentpage = getCurrentPageFromQueryParams();
-export async function changePage() {
-  const maxPage = (await fetchPages()).length;
-  let current = getCurrentPageFromQueryParams();
-  if (current > maxPage) {
-    current = maxPage;
-  }
-  if (current < 1) {
-    current = 1;
-  }
-  currentpage = current;
-}
+// let currentpage = getCurrentPageFromQueryParams();
+// export async function changePage() {
+//   const maxPage = (await fetchPages()).length;
+//   let current = getCurrentPageFromQueryParams();
+//   if (current > maxPage) {
+//     current = maxPage;
+//   }
+//   if (current < 1) {
+//     current = 1;
+//   }
+//   currentpage = current;
+// }
 
-export function updateQueryParam(page) {
+export function updateQueryParam(pageId) {
   const url = new URL(window.location.href);
-  url.searchParams.set("pages", page);
+  const pageExits = state.pageState.some(page => page.id === pageId);
+  if(pageExits){
+  url.searchParams.set("pages", pageId);
   window.history.replaceState({}, "", url);
+  }
 }
 
 export function getCurrentPageFromQueryParams() {

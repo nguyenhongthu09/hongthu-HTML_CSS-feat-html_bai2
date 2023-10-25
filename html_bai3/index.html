@@ -1,69 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+
 </head>
+
 <body>
-        <div class="buttons">
-          <div class="icon-add">
-            <button class="icon-btn-add"><img src="img/icons8-plus-math-30.png" alt=""></button>
-       </div>
-      <div class="pages">
-        <div class="del-page">
-          <button type="submit" id="xoapage">Del Page</button>
-     </div>
-     <div class="add-page">
-          <button id="thempage">Add Page</button>
-     </div>
+  <div class="buttons">
+    <div class="icon-add">
+      <button class="icon-btn-add"><img src="img/icons8-plus-math-30.png" alt=""></button>
+    </div>
+    <div class="pages">
+      <div class="del-page">
+        <button type="submit" id="xoapage">Del Page</button>
       </div>
-       <div class="overlay"></div>
-        </div>
-         <form id="form_add_ud" action="" class="form-add-ungdung">
-            <div class="form_add_ud_name">
-                <input type="text" id="name_icon" placeholder="Name ">
-                <p id="name_error" class="error-message" >Vui lòng nhập tên ứng dụng.</p>
-            </div>
-            <div class="form_add_ud_upfile">
-                <input id="file" type="file" placeholder="Tai len icon">
-                <img id="uploadedImage" src="#" alt="Uploaded Image" accept="image/png, image/jpeg" >
-            </div>
-         
-            <button type="submit" id="btnSubmit">Add</button>
-            <button type="button" id="btn-cancel">Cancel</button>
-         </form>
+      <div class="add-page">
+        <button id="thempage">Add Page</button>
+      </div>
+    </div>
+    <div class="overlay"></div>
+  </div>
+  <form id="form_add_ud" action="" class="form-add-ungdung">
+    <div class="form_add_ud_name">
+      <input type="text" id="name_icon" placeholder="Name ">
+      <p id="name_error" class="error-message">Vui lòng nhập tên ứng dụng.</p>
+    </div>
+    <div class="form_add_ud_upfile">
+      <input id="file" type="file" placeholder="Tai len icon">
+      <img id="uploadedImage" src="#" alt="Uploaded Image" accept="image/png, image/jpeg">
+    </div>
 
-       
-            <form id="form_edit_ud" class="form-edit-ungdung" action="">
-              <div class="form_edit_ud_name">
-                <input type="text" id="edited_name_icon" placeholder="Name">
-                <p id="edited_name_error" class="error-message">Vui lòng nhập tên ứng dụng.</p>
-              </div>
-              <div class="form_edit_ud_upfile">
-                <input id="edited_file" type="file" placeholder="Tải lên biểu tượng">
-                <img id="edited_uploadedImage" src="#"  accept="image/png, image/jpeg">
-              </div>
-              <button type="submit" id="btnEditSubmit">Chỉnh sửa</button>
-              <button type="button" id="btnEditCancel">Hủy</button>
-            </form>
-          
-          
+    <button type="submit" id="btnSubmit">Add</button>
+    <button type="button" id="btn-cancel">Cancel</button>
+  </form>
 
 
+  <form id="form_edit_ud" class="form-edit-ungdung" action="">
+    <div class="form_edit_ud_name">
+      <input type="text" id="edited_name_icon" placeholder="Name">
+      <p id="edited_name_error" class="error-message">Vui lòng nhập tên ứng dụng.</p>
+    </div>
+    <div class="form_edit_ud_upfile">
+      <input id="edited_file" type="file" placeholder="Tải lên biểu tượng">
+      <img id="edited_uploadedImage" src="#" accept="image/png, image/jpeg">
+    </div>
+    <button type="submit" id="btnEditSubmit">Chỉnh sửa</button>
+    <button type="button" id="btnEditCancel">Hủy</button>
+  </form>
 
-         <div class="man-hinh-chinh">
-            <div class="iems-applycation cart" id="list-items-apply">
-            </div>
-            <button id="prev-slider"> < </button>
-           <button id="next-slider"> > </button>
-        </div>
-        <footer class="number-page">Page <span id="current-page"></span></footer>
+
+
+
+
+  <div class="man-hinh-chinh">
+    <div class="iems-applycation cart" id="list-items-apply">
+    </div>
+    <button id="prev-slider">
+      < </button>
+        <button id="next-slider"> > </button>
+  </div>
+  <footer class="number-page">Page <span id="current-page"></span></footer>
 </body>
- <script src="./js/main.js" type="module"></script>
+<script src="./js/main.js" type="module"></script>
+
 </html>
