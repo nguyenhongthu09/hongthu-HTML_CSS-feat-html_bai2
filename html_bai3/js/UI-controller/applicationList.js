@@ -10,22 +10,14 @@ import {
 import { state, initializeState } from "../global/state.js";
 const cart = document.getElementById("list-items-apply");
 
-export async function showListApplication(pageIndex) {
-  const currentPageId = pageIndex || getCurrentPageFromQueryParams();
-  const visiblePages = state.pageState.filter((page) => !page.deleted);
+export async function showListApplication(pageId) {
+  const pageid = pageId || getCurrentPageFromQueryParams();
+  const currentPageId = state.pageState.find((page) => page.id === pageid);
 
-  const currentPageData = visiblePages.find(
-    (page) => page.id === currentPageId
-  );
-  // const currentPageData = state.pageState.find(
-  //   (page) => page.id === currentPageId
-  // );
-
-  if (currentPageData) {
-    const currentPageIndex = state.pageState.indexOf(currentPageData) + 1;
-
+  if (currentPageId) {
+    const currentPageIndex = state.pageState.indexOf(currentPageId) + 1;
     const filteredApplications = state.applicationState.filter(
-      (apply) => apply.pageIndex === currentPageData.id
+      (apply) => apply.pageIndex === currentPageId.id
     );
 
     cart.innerHTML = filteredApplications
@@ -52,10 +44,15 @@ export function handlePageButtonClick() {
   const delPageButton = document.getElementById("xoapage");
   addPageButton.addEventListener("click", async (event) => {
     event.preventDefault();
-    await addNewPage();
+  const newpage =  await addNewPage();
+      if(newpage){
 
-    initializeStateAndPageNumber();
-    showListApplication();
+        updateQueryParam(newpage.id);
+        initializeStateAndPageNumber();
+        showListApplication(newpage.id);
+        
+      }
+ 
   });
 
   delPageButton.addEventListener("click", async () => {
@@ -73,48 +70,70 @@ export function handlePageButtonClick() {
     const deleteSuccess = await delPage(pageToDelete.id);
 
     if (deleteSuccess) {
-      if (currentPage === state.pageState.length) {
-        current = currentPage - 1;
-      } else {
-        current = currentPage + 1;
+      const pageIndexToDelete = state.pageState.findIndex(
+        (page) => page.id === pageToDelete.id
+      );
+      if (pageIndexToDelete !== -1) {
+        state.pageState.splice(pageIndexToDelete, 1);
       }
 
-      pageToDelete.deleted = true;
+      let newPageToShow;
+      if (pageIndexToDelete === state.pageState.length) {
+        newPageToShow = state.pageState[pageIndexToDelete - 1];
+      } else {
+        newPageToShow = state.pageState[pageIndexToDelete];
+      }
 
+      updateQueryParam(newPageToShow.id);
+
+      current = newPageToShow.id;
       console.log(current, "current sau khi xoa");
-
-      updateQueryParam(current);
       showListApplication(current);
     } else {
       console.error("Lỗi xóa trang.");
     }
   });
 }
+
+function getPageIndexById(pageId) {
+  for (let i = 0; i < state.pageState.length; i++) {
+    if (state.pageState[i].id === pageId) {
+      console.log(pageId, "pageid");
+      return i;
+    }
+  }
+}
+
 let current = getCurrentPageFromQueryParams();
+console.log(current, "current");
+
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
 
   btnNext.addEventListener("click", async () => {
-    if (current >= state.pageState.length) {
-      return;
+    console.log("okok");
+    const currentIndex = getPageIndexById(current);
+    console.log(currentIndex, " currentindex cua trang");
+    if (currentIndex < state.pageState.length - 1) {
+      current = state.pageState[currentIndex + 1].id;
+      updateQueryParam(current);
+      showListApplication(current);
     }
-    current += 1;
-    updateQueryParam(current);
-    console.log(current, "page tt");
-    showListApplication(current);
   });
 
   btnPrev.addEventListener("click", async () => {
-    if (current <= 1) {
-      return;
+    console.log("lui lai");
+    const currentIndex = getPageIndexById(current);
+    console.log(currentIndex, " currentindex cuar trang");
+    if (currentIndex > 0) {
+      current = state.pageState[currentIndex - 1].id;
+      updateQueryParam(current);
+      showListApplication(current);
     }
-    current -= 1;
-    updateQueryParam(current);
-    console.log(current, "page phia truoc");
-    showListApplication(current);
   });
 }
+
 function updateCurrentPageNumber() {
   const currentPageElement = document.getElementById("current-page");
   const currentPage = getCurrentPageFromQueryParams();

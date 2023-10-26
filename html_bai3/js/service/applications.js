@@ -93,10 +93,6 @@ export function updateData(id, newName, newImage, pageIndex) {
     });
 }
 
-export function updateCurrentPage(newPage) {
-  currentPagee = newPage;
-  updateQueryParam(currentPagee);
-}
 
 //CHANGE PAGE
 
@@ -116,23 +112,25 @@ export let currentPagee = getCurrentPageFromQueryParams();
 
 export function updateQueryParam(pageId) {
   const url = new URL(window.location.href);
-  const pageExists = state.pageState.some(page => page.id === pageId && !page.deleted);
+  const pageExists = state.pageState.some(page => page.id === pageId );
   if(pageExists){
   url.searchParams.set("pages", pageId);
   window.history.replaceState({}, "", url);
   }
-  
-  
-  
 }
 
 export function getCurrentPageFromQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
   const currentPagee = urlParams.get("pages");
-  return parseInt(currentPagee, 10) || 1;
+  return currentPagee;
 }
 
 //ADD PAGE
+export function updateCurrentPage(newPage) {
+  currentPagee = newPage;
+  console.log(currentPagee, "current khi add page");
+  updateQueryParam(currentPagee);
+}
 
 export async function addNewPage() {
   try {
@@ -152,7 +150,7 @@ export async function addNewPage() {
 
       state.pageState.push(createdPageData);
       updateCurrentPage(createdPageData.id);
-      console.log(createdPageData, "okok");
+      console.log(createdPageData, "trang vua them moi");
       return createdPageData;
     }
   } catch (error) {

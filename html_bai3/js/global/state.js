@@ -10,11 +10,7 @@ export async function initializeState() {
     const pagesData = await fetchPages();
     const applicationsData = await fetchApplicationsss();
 
-    state.pageState = pagesData.map((page) => ({
-      ...page,
-      deleted: false // Đặt thuộc tính deleted mặc định là false
-    }));
-
+    state.pageState = pagesData;
     state.applicationState = applicationsData;
 
     if (state.pageState.length > 0) {
