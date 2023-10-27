@@ -83,11 +83,21 @@ export function handlePageButtonClick() {
         newPageToShow = state.pageState[pageIndexToDelete];
       }
 
-      updateQueryParam(newPageToShow.id);
+      if (newPageToShow) {
+        state.current = newPageToShow.id;
+        console.log(state.current, "current sau khi xoa");
+        showListApplication(state.current);
+      } else {
+        if (pageIndexToDelete > 0) {
+          newPageToShow = state.pageState[pageIndexToDelete - 1];
+          state.current = newPageToShow.id;
+          console.log(state.current, "current sau khi xoa");
+          showListApplication(state.current);
+        } else {
+        }
+      }
 
-      current = newPageToShow.id;
-      console.log(current, "current sau khi xoa");
-      showListApplication(current);
+      updateQueryParam(state.current);
     } else {
       console.error("Lỗi xóa trang.");
     }
@@ -103,11 +113,8 @@ function getPageIndexById(pageId) {
   }
 }
 
-let current = getCurrentPageFromQueryParams();
-console.log(current, "current");
-
 function setCurrentPage(newPageId, newIndex) {
-  current = newPageId;
+  state.current = newPageId;
   updateQueryParam(newPageId);
   showListApplication(newPageId);
   // const btnNext = document.getElementById("next-slider");
@@ -122,23 +129,23 @@ export function setPageButtonEvent() {
 
   btnNext.addEventListener("click", async () => {
     console.log("okok");
-    const currentIndex = getPageIndexById(current);
+    const currentIndex = getPageIndexById(state.current);
     console.log(currentIndex, " currentindex cua trang");
     if (currentIndex < state.pageState.length - 1) {
-      current = state.pageState[currentIndex + 1].id;
-      updateQueryParam(current);
-      showListApplication(current);
+      state.current = state.pageState[currentIndex + 1].id;
+      updateQueryParam(state.current);
+      showListApplication(state.current);
     }
   });
 
   btnPrev.addEventListener("click", async () => {
     console.log("lui lai");
-    const currentIndex = getPageIndexById(current);
+    const currentIndex = getPageIndexById(state.current);
     console.log(currentIndex, " currentindex cuar trang");
     if (currentIndex > 0) {
-      current = state.pageState[currentIndex - 1].id;
-      updateQueryParam(current);
-      showListApplication(current);
+      state.current = state.pageState[currentIndex - 1].id;
+      updateQueryParam(state.current);
+      showListApplication(state.current);
     }
   });
 }
