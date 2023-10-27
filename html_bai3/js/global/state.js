@@ -29,9 +29,9 @@ export async function initializeState() {
     const pageIdURL = getPageIdURL();
 
     if (pageIdURL) {
-      const pageExists = state.pageState.some((page) => page.id === pageIdURL);
-
-      if (pageExists) {
+      const pageCurrent = state.pageState.some((page) => page.id === pageIdURL);
+      
+      if (pageCurrent) {
         state.current = pageIdURL;
         updateQueryParam(pageIdURL);
       } else {
