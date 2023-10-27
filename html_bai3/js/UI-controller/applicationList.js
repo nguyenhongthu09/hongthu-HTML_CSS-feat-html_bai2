@@ -105,7 +105,7 @@ export function handlePageButtonClick() {
 }
 
 function getPageIndexById(pageId) {
-  for (let i = 0; i <= state.pageState.length; i++) {
+  for (let i = 0; i < state.pageState.length; i++) {
     if (state.pageState[i].id === pageId) {
       console.log(pageId, "pageid");
       return i;
@@ -164,7 +164,7 @@ function updateCurrentPageNumber() {
 }
 
 function initializeStateAndPageNumber() {
-  initializeState();
+  // initializeState();
   updateCurrentPageNumber();
 }
 

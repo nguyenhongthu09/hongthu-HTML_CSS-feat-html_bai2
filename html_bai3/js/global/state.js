@@ -26,14 +26,26 @@ export async function initializeState() {
 
     state.pageState = pagesData;
     state.applicationState = applicationsData;
-    state.current = getPageIdURL();
-    if (!state.current && state.pageState.length > 0) {
-      state.current = state.pageState[0].id;
+    const pageIdURL = getPageIdURL();
+
+    if (pageIdURL) {
+      const pageExists = state.pageState.some((page) => page.id === pageIdURL);
+
+      if (pageExists) {
+        state.current = pageIdURL;
+        updateQueryParam(pageIdURL);
+      } else {
+        state.current = state.pageState[0].id;
+        updateQueryParam(state.current);
+      }
+    } else {
+      if (state.pageState.length > 0) {
+        state.current = state.pageState[0].id;
+        updateQueryParam(state.current);
+      }
     }
 
-    console.log("current khi khoi donng", state.current);
-    const pageIdURl = getPageIdURL();
-    updateQueryParam(pageIdURl);
+    console.log("state.current", state.current);
     showListApplication();
   } catch (error) {
     console.error("Lỗi khi khởi tạo trạng thái:", error);
