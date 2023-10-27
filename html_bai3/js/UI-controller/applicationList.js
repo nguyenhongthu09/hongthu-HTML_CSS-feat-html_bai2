@@ -44,15 +44,14 @@ export function handlePageButtonClick() {
   const delPageButton = document.getElementById("xoapage");
   addPageButton.addEventListener("click", async (event) => {
     event.preventDefault();
-  const newpage =  await addNewPage();
-      if(newpage){
-
-        updateQueryParam(newpage.id);
-        initializeStateAndPageNumber();
-        showListApplication(newpage.id);
-        
-      }
- 
+    const newPage = await addNewPage();
+    if (newPage) {
+      const newIndex = state.pageState.length - 1;
+      updateQueryParam(newPage.id);
+      showListApplication(newPage.id);
+      initializeStateAndPageNumber();
+      setCurrentPage(newPage.id, newIndex);
+    }
   });
 
   delPageButton.addEventListener("click", async () => {
@@ -96,7 +95,7 @@ export function handlePageButtonClick() {
 }
 
 function getPageIndexById(pageId) {
-  for (let i = 0; i < state.pageState.length; i++) {
+  for (let i = 0; i <= state.pageState.length; i++) {
     if (state.pageState[i].id === pageId) {
       console.log(pageId, "pageid");
       return i;
@@ -106,6 +105,16 @@ function getPageIndexById(pageId) {
 
 let current = getCurrentPageFromQueryParams();
 console.log(current, "current");
+
+function setCurrentPage(newPageId, newIndex) {
+  current = newPageId;
+  updateQueryParam(newPageId);
+  showListApplication(newPageId);
+  // const btnNext = document.getElementById("next-slider");
+  const btnPrev = document.getElementById("prev-slider");
+  // btnNext.disabled = newIndex === state.pageState.length - 1;
+  btnPrev.disabled = newIndex === 0;
+}
 
 export function setPageButtonEvent() {
   const btnNext = document.getElementById("next-slider");

@@ -93,7 +93,6 @@ export function updateData(id, newName, newImage, pageIndex) {
     });
 }
 
-
 //CHANGE PAGE
 
 export let currentPagee = getCurrentPageFromQueryParams();
@@ -112,16 +111,19 @@ export let currentPagee = getCurrentPageFromQueryParams();
 
 export function updateQueryParam(pageId) {
   const url = new URL(window.location.href);
-  const pageExists = state.pageState.some(page => page.id === pageId );
-  if(pageExists){
-  url.searchParams.set("pages", pageId);
-  window.history.replaceState({}, "", url);
+  const pageExists = state.pageState.find((page) => page.id === pageId);
+  if (pageExists) {
+    url.searchParams.set("pages", pageId);
+  } else if (state.pageState.length > 0) {
+    url.searchParams.set("pages", state.pageState[0].id);
   }
+  window.history.replaceState({}, "", url);
 }
 
 export function getCurrentPageFromQueryParams() {
   const urlParams = new URLSearchParams(window.location.search);
   const currentPagee = urlParams.get("pages");
+
   return currentPagee;
 }
 
