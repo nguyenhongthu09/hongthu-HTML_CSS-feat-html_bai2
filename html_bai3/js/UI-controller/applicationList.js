@@ -117,9 +117,7 @@ function setCurrentPage(newPageId, newIndex) {
   state.current = newPageId;
   updateQueryParam(newPageId);
   showListApplication(newPageId);
-  // const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
-  // btnNext.disabled = newIndex === state.pageState.length - 1;
   btnPrev.disabled = newIndex === 0;
 }
 
@@ -164,7 +162,6 @@ function updateCurrentPageNumber() {
 }
 
 function initializeStateAndPageNumber() {
-  // initializeState();
   updateCurrentPageNumber();
 }
 
@@ -217,7 +214,17 @@ const handleEditApp = (element) => {
     newData.name = e.target.value;
   });
   edited_file.addEventListener("change", (e) => {
-    newData.image = URL.createObjectURL(e.target.file[0]);
+    // newData.image = URL.createObjectURL(e.target.files[0]);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      newData.image = reader.result;
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   });
 };
 function editApplicationEvent() {

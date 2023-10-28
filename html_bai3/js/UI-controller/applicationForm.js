@@ -1,5 +1,9 @@
-import { getCurrentPageFromQueryParams,addApplicationToCustomPage  } from "../service/applications.js";
+import {
+  getCurrentPageFromQueryParams,
+  addApplicationToCustomPage,
+} from "../service/applications.js";
 import { showListApplication } from "./applicationList.js";
+import { state } from "../global/state.js";
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
   const boxItems = document.getElementById("form_edit_ud");
@@ -9,10 +13,9 @@ function getDOMForms() {
   return {
     overlay,
     boxItems,
-   submitForm,
+    submitForm,
     nameError,
     uploadedImage,
-    
   };
 }
 
@@ -21,12 +24,11 @@ export function initializeFormActions() {
   const cancelButton = document.getElementById("btn-cancel");
   const submitForm = document.getElementById("form_add_ud");
   addButton.addEventListener("click", () => {
-    const {  overlay  } = getDOMForms();
+    const { overlay } = getDOMForms();
     submitForm.style.display = "block";
     overlay.style.display = "block";
   });
   submitForm.addEventListener("submit", (event) => {
-    console.log("okok");
     event.preventDefault();
     var nameInput = document.getElementById("name_icon");
     const uploadedImage = document.getElementById("uploadedImage");
@@ -44,8 +46,8 @@ export function initializeFormActions() {
         name: name,
         image: image,
       };
-    
-      addApplicationToCustomPage(newApplication , pageIndex);
+
+      addApplicationToCustomPage(newApplication, pageIndex);
     }
     showListApplication();
     nameInput.value = "";
@@ -55,7 +57,7 @@ export function initializeFormActions() {
   });
 
   cancelButton.addEventListener("click", () => {
-    const {  overlay, uploadedImage } = getDOMForms();
+    const { overlay, uploadedImage } = getDOMForms();
     submitForm.style.display = "none";
     overlay.style.display = "none";
     uploadedImage.style.display = "none";
@@ -108,16 +110,16 @@ import { updateData } from "../service/applications.js";
 
 export function openFormEditApplication() {
   const { boxItems, overlay } = getDOMForms();
+  const btnSub = document.getElementById("btnEditSubmit");
   boxItems.style.display = "block";
   overlay.style.display = "block";
   uploadedImageEdit();
 
-  boxItems.addEventListener("submit", (event) => {
-    event.preventDefault();
+  btnSub.addEventListener("click", async () => {
     let element = newData.element;
     element.children[element.children.length - 1].innerText = newData.name;
     element.children[element.children.length - 2].src = newData.image;
-    updateData(newData.id, newData.name, newData.image , newData.pageIndex);
+    updateData(newData.id, newData.name, newData.image, newData.pageIndex);
 
     newData.id = "";
     newData.name = "";
@@ -125,7 +127,6 @@ export function openFormEditApplication() {
     newData.pageIndex = null;
 
     closeFormEditApplication();
-   
   });
 
   btnEditCancel.addEventListener("click", () => {
