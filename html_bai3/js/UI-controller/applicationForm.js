@@ -1,8 +1,10 @@
-import {
-  getCurrentPageFromQueryParams,
-  addApplicationToCustomPage,
-} from "../service/applications.js";
+import { getCurrentPageFromQueryParams } from "../service/page.js";
 import { showListApplication } from "./applicationList.js";
+import {
+  addApplicationToCustomPage,
+  updateData,
+} from "../api/applicationFetch.js";
+// import { newData } from "./applicationList.js";
 import { state } from "../global/state.js";
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
@@ -105,9 +107,6 @@ export function closeFormEditApplication() {
   overlay.style.display = "none";
 }
 
-import { newData } from "./applicationList.js";
-import { updateData } from "../service/applications.js";
-
 export function openFormEditApplication() {
   const { boxItems, overlay } = getDOMForms();
   const btnSub = document.getElementById("btnEditSubmit");
@@ -116,17 +115,33 @@ export function openFormEditApplication() {
   uploadedImageEdit();
 
   btnSub.addEventListener("click", async () => {
-    let element = newData.element;
-    element.children[element.children.length - 1].innerText = newData.name;
-    element.children[element.children.length - 2].src = newData.image;
-    updateData(newData.id, newData.name, newData.image, newData.pageIndex);
+    const updatedData = window.newData;
+    if (updatedData.id) {
+      const appToUpdate = state.applicationState.find(
+        (app) => app.id === updatedData.id
+      );
 
-    newData.id = "";
-    newData.name = "";
-    newData.element = "";
-    newData.pageIndex = null;
+      if (appToUpdate) {
+        appToUpdate.name = updatedData.name;
+        appToUpdate.image = updatedData.image;
 
-    closeFormEditApplication();
+        updatedData.element.children[
+          updatedData.element.children.length - 1].innerText = updatedData.name;
+        updatedData.element.children[updatedData.element.children.length - 2].src = updatedData.image;
+      }
+      updateData(
+        updatedData.id,
+        updatedData.name,
+        updatedData.image,
+        updatedData.pageIndex
+      );
+      updatedData.id = "";
+      updatedData.name = "";
+      updatedData.image = "";
+      updatedData.element = "";
+      updatedData.pageIndex = null;
+      closeFormEditApplication();
+    }
   });
 
   btnEditCancel.addEventListener("click", () => {

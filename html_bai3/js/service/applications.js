@@ -1,28 +1,9 @@
-import { API_URL } from "../data/api.js";
 import { state } from "../global/state.js";
+import { fetchApplicationsss } from "../api/applicationFetch.js";
+import { fetchPages } from "../api/pagesFetch.js";
+import { updateQueryParam } from "./page.js";
 
-export function deleteApply(applyId) {
-  fetch(`${API_URL}/applications/${applyId}`, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (response.ok) {
-        const appIndex = state.applicationState.findIndex(
-          (app) => app.id === applyId
-        );
-        if (appIndex !== -1) {
-          state.applicationState.splice(appIndex, 1);
-        }
-      } else {
-        console.error("Xóa ứng dụng không thành công.");
-      }
-    })
-    .catch((error) => {
-      console.error("Lỗi kết nối đến API: " + error);
-    });
-}
-
-function calculateCurrentId() {
+export function calculateCurrentId() {
   let maxId = 0;
   for (const apply of state.applicationState) {
     if (apply.id > maxId) {
@@ -32,168 +13,66 @@ function calculateCurrentId() {
   return maxId;
 }
 
-export async function addApplicationToCustomPage(application, pageIndex) {
-  try {
-    const newApplication = {
-      id: calculateCurrentId() + 1,
-      name: application.name,
-      image: application.image,
-      pageIndex: pageIndex,
-    };
-
-    state.applicationState.push(newApplication);
-
-    const response = await fetch(`${API_URL}/applications`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newApplication),
-    });
-
-    if (response.status === 201) {
-      const createdApplicationData = await response.json();
-      console.log("Thêm ứng dụng thành công:", createdApplicationData);
-    } else {
-      console.error("Lỗi khi thêm ứng dụng:", response.statusText);
-    }
-  } catch (error) {
-    console.error("Lỗi khi gửi POST request:", error);
-  }
-}
-
-/// UPDATE
-
-export function updateData(id, newName, newImage, pageIndex) {
-  return fetch(`${API_URL}/applications/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name: newName, image: newImage, pageIndex }),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error("Cập nhật ứng dụng không thành công.");
-        throw new Error("Cập nhật không thành công");
-      }
-    })
-    .then(() => {
-      const appIndex = state.applicationState.findIndex((app) => app.id === id);
-      if (appIndex !== -1) {
-        state.applicationState[appIndex].name = newName;
-        state.applicationState[appIndex].image = newImage;
-        state.applicationState[appIndex].pageIndex = pageIndex;
-      }
-    })
-    .catch((error) => {
-      console.error("Lỗi kết nối đến API: " + error);
-    });
-}
-
-//CHANGE PAGE
-
-export let currentPagee = getCurrentPageFromQueryParams();
-// let currentpage = getCurrentPageFromQueryParams();
-// export async function changePage() {
-//   const maxPage = (await fetchPages()).length;
-//   let current = getCurrentPageFromQueryParams();
-//   if (current > maxPage) {
-//     current = maxPage;
-//   }
-//   if (current < 1) {
-//     current = 1;
-//   }
-//   currentpage = current;
-// }
-
-export function updateQueryParam(pageId) {
-  const url = new URL(window.location.href);
-  const pageExists = state.pageState.find((page) => page.id === pageId);
-  if (pageExists) {
-    url.searchParams.set("pages", pageId);
-  } else if (state.pageState.length > 0) {
-    url.searchParams.set("pages", state.pageState[0].id);
-  }
-  window.history.replaceState({}, "", url);
-}
-
-export function getCurrentPageFromQueryParams() {
+function getPageIdURL() {
   const urlParams = new URLSearchParams(window.location.search);
-  const currentPagee = urlParams.get("pages");
+  const pageIdFromURL = urlParams.get("pages");
 
-  return currentPagee;
+  if (pageIdFromURL) {
+    return pageIdFromURL;
+  } else if (state.pageState.length > 0 && state.pageState[0]) {
+    return state.pageState[0].id;
+  }
 }
 
-//ADD PAGE
-export function updateCurrentPage(newPage) {
-  currentPagee = newPage;
-  console.log(currentPagee, "current khi add page");
-  updateQueryParam(currentPagee);
-}
-
-export async function addNewPage() {
+export async function initializeState() {
   try {
-    const response = await fetch(`${API_URL}/pages`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    });
+    const pagesData = await fetchPages();
+    const applicationsData = await fetchApplicationsss();
 
-    if (response.status === 201) {
-      const createdPageData = await response.json();
-      if (!("name" in createdPageData)) {
-        createdPageData.name = createdPageData.id.toString();
+    state.pageState = pagesData;
+    state.applicationState = applicationsData;
+    const pageIdURL = getPageIdURL();
+
+    if (pageIdURL) {
+      const pageCurrent = state.pageState.some((page) => page.id === pageIdURL);
+
+      if (pageCurrent) {
+        state.current = pageIdURL;
+        updateQueryParam(pageIdURL);
+      } else {
+        state.current = state.pageState[0].id;
+        updateQueryParam(state.current);
       }
-
-      state.pageState.push(createdPageData);
-      updateCurrentPage(createdPageData.id);
-      console.log(createdPageData, "trang vua them moi");
-      return createdPageData;
+    } else {
+      if (state.pageState.length > 0) {
+        state.current = state.pageState[0].id;
+        updateQueryParam(state.current);
+      }
     }
+
+    console.log("state.current", state.current);
   } catch (error) {
-    console.error("Lỗi khi gửi POST request:", error);
-    return null;
+    console.error("Lỗi khi khởi tạo trạng thái:", error);
   }
 }
 
-export async function delPage(pageId) {
-  await fetch(`${API_URL}/pages/${pageId}`, {
-    method: "DELETE",
-  });
-  return pageId;
+function getPageIndexById(pageId) {
+  const index = state.pageState.findIndex((page) => page.id === pageId);
+  console.log(pageId, "pageid");
+  return index;
 }
 
-export async function fetchPages() {
-  try {
-    const response = await fetch(`${API_URL}/pages`, {
-      method: "GET",
-    });
-    if (response.status === 200) {
-      const pagesData = await response.json();
+export function changPages(direction) {
+  const currentIndex = getPageIndexById(state.current);
+  console.log(currentIndex, "currentindex cua trang");
 
-      return pagesData;
-    }
-  } catch (error) {
-    console.error("Lỗi khi gửi GET request cho Pages:", error);
+  if (direction === "next" && currentIndex < state.pageState.length - 1) {
+    state.current = state.pageState[currentIndex + 1].id;
+  } else if (direction === "prev" && currentIndex > 0) {
+    state.current = state.pageState[currentIndex - 1].id;
   }
-}
 
-export async function fetchApplicationsss() {
-  try {
-    const response = await fetch(`${API_URL}/applications`, {
-      method: "GET",
-    });
-    if (response.status === 200) {
-      const applicationsData = await response.json();
-
-      return applicationsData;
-    }
-  } catch (error) {
-    console.error("Lỗi khi gửi GET request cho Applications:", error);
+  if (state.current !== state.pageState[currentIndex].id) {
+    updateQueryParam(state.current);
   }
 }
