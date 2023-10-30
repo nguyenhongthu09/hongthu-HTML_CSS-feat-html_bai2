@@ -1,39 +1,19 @@
 import { state } from "../global/state.js";
 import { delPage } from "../api/pagesFetch.js";
 
-export let currentPagee = getCurrentPageFromQueryParams();
-
-export function updateQueryParam(pageId) {
-  const url = new URL(window.location.href);
-  const pageExists = state.pageState.find((page) => page.id === pageId);
-  if (pageExists) {
-    url.searchParams.set("pages", pageId);
-  } else if (state.pageState.length > 0) {
-    url.searchParams.set("pages", state.pageState[0].id);
-  }
-  window.history.replaceState({}, "", url);
+export function findPageById(pageId) {
+  return state.pageState.find((page) => page.id === pageId);
 }
 
-export function getCurrentPageFromQueryParams() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const currentPagee = urlParams.get("pages");
-
-  return currentPagee;
-}
-
-export function updateCurrentPage(newPage) {
-  currentPagee = newPage;
-  console.log(currentPagee, "current khi add page");
-  updateQueryParam(currentPagee);
+export function findPageByIndex( pageToDelete) {
+  return state.pageState.findIndex((page) => page.id === pageToDelete.id);
 }
 
 export async function deletePage(pageToDelete) {
   const deleteSuccess = await delPage(pageToDelete.id);
 
   if (deleteSuccess) {
-    const pageIndexToDelete = state.pageState.findIndex(
-      (page) => page.id === pageToDelete.id
-    );
+    const pageIndexToDelete = findPageByIndex(pageToDelete);
 
     if (pageIndexToDelete !== -1) {
       state.pageState.splice(pageIndexToDelete, 1);
@@ -61,26 +41,9 @@ export async function deletePage(pageToDelete) {
       detail: { newCurrentPage: state.current },
     });
     document.dispatchEvent(event);
-    updateQueryParam(state.current);
   }
-}
-export function getDeleteById() {
-  const currentPage = getCurrentPageFromQueryParams();
-  const pageToDelete = state.pageState.find((page) => page.id === currentPage);
-
-  if (!pageToDelete) {
-    console.error("Không tìm thấy trang để xóa.");
-    return;
-  }
-
-  if (state.pageState.length === 1) {
-    return;
-  }
-
-  deletePage(pageToDelete);
 }
 
 export function setCurrentPage(newPageId) {
   state.current = newPageId;
-  updateQueryParam(newPageId);
 }

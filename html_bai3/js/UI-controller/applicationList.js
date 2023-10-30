@@ -1,13 +1,13 @@
 import { openFormEditApplication } from "./applicationForm.js";
-import { getCurrentPageFromQueryParams } from "../service/page.js";
+import { getCurrentPageFromQueryParams } from "../UI-controller/page.js";
 import { state } from "../global/state.js";
 import { deleteApply } from "../api/applicationFetch.js";
-import { changPages } from "../service/applications.js";
-
+import { changPages , findApplicationById } from "../service/applications.js";
+import { findPageById } from "../service/page.js";
 const cart = document.getElementById("list-items-apply");
 export async function showListApplication(pageId) {
   const pageid = pageId || getCurrentPageFromQueryParams();
-  const currentPageId = state.pageState.find((page) => page.id === pageid);
+  const currentPageId = findPageById(pageid);
 
   if (currentPageId) {
     const currentPageIndex = state.pageState.indexOf(currentPageId) + 1;
@@ -68,9 +68,7 @@ const handleEditApp = (element) => {
   const editedUploadedImage = document.getElementById("edited_uploadedImage");
   const edited_file = document.querySelector("#edited_file");
   const idCurrentEdit = parseInt(element.getAttribute("edit"));
-  const appToEdit = state.applicationState.find(
-    (app) => app.id === idCurrentEdit
-  );
+  const appToEdit = findApplicationById(idCurrentEdit);
   if (appToEdit) {
     editedUploadedImage.style.display = "block";
     editedNameIconInput.value = appToEdit.name;

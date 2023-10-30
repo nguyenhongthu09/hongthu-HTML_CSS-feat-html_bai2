@@ -1,6 +1,6 @@
 import { API_URL } from "../constans/apiUrl.js";
 import { state } from "../global/state.js";
-import { updateCurrentPage } from "../service/page.js";
+
 
 //CREAT
 export async function addNewPage() {
@@ -20,7 +20,6 @@ export async function addNewPage() {
       }
 
       state.pageState.push(createdPageData);
-      updateCurrentPage(createdPageData.id);
       console.log(createdPageData, "trang vua them moi");
       return createdPageData;
     }

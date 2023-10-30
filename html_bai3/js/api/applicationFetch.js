@@ -1,7 +1,7 @@
 import { API_URL } from "../constans/apiUrl.js";
 import { state } from "../global/state.js";
 import { calculateCurrentId } from "../service/applications.js";
-
+import { findApplicationByIndex } from "../service/applications.js";
 //DELETE
 export function deleteApply(applyId) {
   fetch(`${API_URL}/applications/${applyId}`, {
@@ -9,9 +9,7 @@ export function deleteApply(applyId) {
   })
     .then((response) => {
       if (response.ok) {
-        const appIndex = state.applicationState.findIndex(
-          (app) => app.id === applyId
-        );
+        const appIndex = findApplicationByIndex(applyId);
         if (appIndex !== -1) {
           state.applicationState.splice(appIndex, 1);
         }
@@ -73,7 +71,7 @@ export function updateData(id, newName, newImage, pageIndex) {
       }
     })
     .then(() => {
-      const appIndex = state.applicationState.findIndex((app) => app.id === id);
+      const appIndex = findApplicationByIndex(id);
       if (appIndex !== -1) {
         state.applicationState[appIndex].name = newName;
         state.applicationState[appIndex].image = newImage;

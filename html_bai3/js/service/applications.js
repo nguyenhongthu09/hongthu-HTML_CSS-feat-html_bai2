@@ -1,7 +1,12 @@
 import { state } from "../global/state.js";
 import { fetchApplicationsss } from "../api/applicationFetch.js";
 import { fetchPages } from "../api/pagesFetch.js";
-import { updateQueryParam } from "./page.js";
+import { updateQueryParam } from "../UI-controller/page.js";
+
+export function findApplicationById(appId) {
+  return state.applicationState.find((app) => app.id === appId);
+}
+
 
 export function calculateCurrentId() {
   let maxId = 0;
@@ -56,7 +61,7 @@ export async function initializeState() {
   }
 }
 
-function getPageIndexById(pageId) {
+export function getPageIndexById(pageId) {
   const index = state.pageState.findIndex((page) => page.id === pageId);
   console.log(pageId, "pageid");
   return index;
@@ -75,4 +80,8 @@ export function changPages(direction) {
   if (state.current !== state.pageState[currentIndex].id) {
     updateQueryParam(state.current);
   }
+}
+
+export function findApplicationByIndex(appId) {
+  return state.applicationState.findIndex((app) => app.id === appId);
 }
