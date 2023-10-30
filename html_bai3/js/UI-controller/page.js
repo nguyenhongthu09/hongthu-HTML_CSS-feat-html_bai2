@@ -25,7 +25,6 @@ export function handlePageButtonClick() {
     const newCurrentPage = event.detail.newCurrentPage;
     showListApplication(newCurrentPage);
   });
- 
 }
 
 function updateCurrentPageNumber() {

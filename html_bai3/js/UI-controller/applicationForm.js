@@ -4,7 +4,6 @@ import {
   addApplicationToCustomPage,
   updateData,
 } from "../api/applicationFetch.js";
-// import { newData } from "./applicationList.js";
 import { state } from "../global/state.js";
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
@@ -126,8 +125,11 @@ export function openFormEditApplication() {
         appToUpdate.image = updatedData.image;
 
         updatedData.element.children[
-          updatedData.element.children.length - 1].innerText = updatedData.name;
-        updatedData.element.children[updatedData.element.children.length - 2].src = updatedData.image;
+          updatedData.element.children.length - 1
+        ].innerText = updatedData.name;
+        updatedData.element.children[
+          updatedData.element.children.length - 2
+        ].src = updatedData.image;
       }
       updateData(
         updatedData.id,
