@@ -4,8 +4,8 @@ import {
   addApplicationToCustomPage,
   updateData,
 } from "../api/applicationFetch.js";
-import { state } from "../global/state.js";
 import { findApplicationById } from "../service/applications.js";
+
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
   const boxItems = document.getElementById("form_edit_ud");
@@ -117,7 +117,7 @@ export function openFormEditApplication() {
   btnSub.addEventListener("click", async () => {
     const updatedData = window.newData;
     if (updatedData.id) {
-      const appToUpdate =findApplicationById(updatedData.id);
+      const appToUpdate = findApplicationById(updatedData.id);
 
       if (appToUpdate) {
         appToUpdate.name = updatedData.name;

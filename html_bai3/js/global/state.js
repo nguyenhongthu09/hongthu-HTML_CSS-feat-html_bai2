@@ -1,5 +1,5 @@
 export const state = {
   pageState: [],
   applicationState: [],
-  current: null,
+  idUrl: null,
 };

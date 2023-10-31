@@ -1,6 +1,5 @@
 import { API_URL } from "../constans/apiUrl.js";
-import { state } from "../global/state.js";
-
+import { getPageState } from "../service/page.js";
 
 //CREAT
 export async function addNewPage() {
@@ -15,11 +14,12 @@ export async function addNewPage() {
 
     if (response.status === 201) {
       const createdPageData = await response.json();
+      const pageState = getPageState();
       if (!("name" in createdPageData)) {
         createdPageData.name = createdPageData.id.toString();
       }
 
-      state.pageState.push(createdPageData);
+     pageState.push(createdPageData);
       console.log(createdPageData, "trang vua them moi");
       return createdPageData;
     }

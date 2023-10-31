@@ -1,7 +1,10 @@
 import { API_URL } from "../constans/apiUrl.js";
-import { state } from "../global/state.js";
-import { calculateCurrentId } from "../service/applications.js";
-import { findApplicationByIndex } from "../service/applications.js";
+import {
+  calculateCurrentId,
+  findApplicationByIndex,
+  getApplicationState,
+} from "../service/applications.js";
+
 //DELETE
 export function deleteApply(applyId) {
   fetch(`${API_URL}/applications/${applyId}`, {
@@ -10,11 +13,10 @@ export function deleteApply(applyId) {
     .then((response) => {
       if (response.ok) {
         const appIndex = findApplicationByIndex(applyId);
+        const applicationState = getApplicationState();
         if (appIndex !== -1) {
-          state.applicationState.splice(appIndex, 1);
+          applicationState.splice(appIndex, 1);
         }
-      } else {
-        console.error("Xóa ứng dụng không thành công.");
       }
     })
     .catch((error) => {
@@ -31,8 +33,8 @@ export async function addApplicationToCustomPage(application, pageIndex) {
       image: application.image,
       pageIndex: pageIndex,
     };
-
-    state.applicationState.push(newApplication);
+    const applicationState = getApplicationState();
+    applicationState.push(newApplication);
 
     const response = await fetch(`${API_URL}/applications`, {
       method: "POST",
@@ -71,11 +73,12 @@ export function updateData(id, newName, newImage, pageIndex) {
       }
     })
     .then(() => {
+      const applicationState = getApplicationState();
       const appIndex = findApplicationByIndex(id);
       if (appIndex !== -1) {
-        state.applicationState[appIndex].name = newName;
-        state.applicationState[appIndex].image = newImage;
-        state.applicationState[appIndex].pageIndex = pageIndex;
+        applicationState[appIndex].name = newName;
+        applicationState[appIndex].image = newImage;
+        applicationState[appIndex].pageIndex = pageIndex;
       }
     })
     .catch((error) => {

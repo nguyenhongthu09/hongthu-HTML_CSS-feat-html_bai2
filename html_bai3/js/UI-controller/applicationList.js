@@ -1,19 +1,21 @@
 import { openFormEditApplication } from "./applicationForm.js";
 import { getCurrentPageFromQueryParams } from "../UI-controller/page.js";
-import { state } from "../global/state.js";
 import { deleteApply } from "../api/applicationFetch.js";
-import { changPages , findApplicationById } from "../service/applications.js";
-import { findPageById } from "../service/page.js";
-const cart = document.getElementById("list-items-apply");
+import {
+  changPages,
+  findApplicationById,
+  findApplicationByFilter,
+} from "../service/applications.js";
+import { findPageById, getPageState } from "../service/page.js";
+
 export async function showListApplication(pageId) {
+  const cart = document.getElementById("list-items-apply");
   const pageid = pageId || getCurrentPageFromQueryParams();
   const currentPageId = findPageById(pageid);
-
+  const pageState = getPageState();
   if (currentPageId) {
-    const currentPageIndex = state.pageState.indexOf(currentPageId) + 1;
-    const filteredApplications = state.applicationState.filter(
-      (apply) => apply.pageIndex === currentPageId.id
-    );
+    const currentPageIndex = pageState.indexOf(currentPageId) + 1;
+    const filteredApplications = findApplicationByFilter(currentPageId.id);
 
     cart.innerHTML = filteredApplications
       .map((apply) => {
@@ -39,12 +41,12 @@ export function setPageButtonEvent() {
   const btnPrev = document.getElementById("prev-slider");
   btnNext.addEventListener("click", () => {
     changPages("next");
-    showListApplication(state.current);
+    showListApplication();
   });
 
   btnPrev.addEventListener("click", () => {
     changPages("prev");
-    showListApplication(state.current);
+    showListApplication();
   });
 }
 
@@ -99,6 +101,7 @@ const handleEditApp = (element) => {
     }
   });
 };
+
 function editApplicationEvent() {
   let itemsApplyElements = document.querySelectorAll(".items-apply");
   itemsApplyElements.forEach((element) => {
