@@ -3,7 +3,6 @@ import { fetchApplicationsss } from "../api/applicationFetch.js";
 import { fetchPages } from "../api/pagesFetch.js";
 import { updateQueryParam } from "../UI-controller/page.js";
 import { getPageState, getPageIndexById } from "./page.js";
-
 export function getApplicationState() {
   return state.applicationState;
 }
@@ -37,13 +36,12 @@ export async function initializeState() {
   try {
     const pagesData = await fetchPages();
     const applicationsData = await fetchApplicationsss();
-    const pageState = getPageState();
     state.pageState = pagesData;
     state.applicationState = applicationsData;
     const pageIdURL = getPageIdURL();
 
     if (pageIdURL) {
-      const pageCurrent = pageState.some((page) => page.id === pageIdURL);
+      const pageCurrent = state.pageState.some((page) => page.id === pageIdURL);
 
       if (pageCurrent) {
         state.idUrl = pageIdURL;
@@ -60,13 +58,16 @@ export async function initializeState() {
     }
 
     console.log("state.idUrl", state.idUrl);
+
+    return true;
   } catch (error) {
     console.error("Lỗi khi khởi tạo trạng thái:", error);
+    return false;
   }
 }
 
 export function changPages(direction) {
-  const currentIndex = getPageIndexById(setid);
+  const currentIndex = getPageIndexById(state.idUrl);
   const pageState = getPageState();
   console.log(currentIndex, "currentindex cua trang");
 
@@ -87,4 +88,12 @@ export function findApplicationByIndex(appId) {
 
 export function findApplicationByFilter(pageIndex) {
   return state.applicationState.filter((app) => app.pageIndex === pageIndex);
+}
+
+export function removeApplicationById(id) {
+  const appstate = getApplicationState();
+  const index = appstate.findIndex((app) => app.id === id);
+  if (index !== -1) {
+    appstate.splice(index, 1);
+  }
 }

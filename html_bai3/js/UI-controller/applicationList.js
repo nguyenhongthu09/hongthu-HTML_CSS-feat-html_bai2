@@ -5,8 +5,10 @@ import {
   changPages,
   findApplicationById,
   findApplicationByFilter,
+  removeApplicationById,
 } from "../service/applications.js";
 import { findPageById, getPageState } from "../service/page.js";
+import { loading } from "./common.js";
 
 export async function showListApplication(pageId) {
   const cart = document.getElementById("list-items-apply");
@@ -18,13 +20,16 @@ export async function showListApplication(pageId) {
     const filteredApplications = findApplicationByFilter(currentPageId.id);
 
     cart.innerHTML = filteredApplications
-      .map((apply) => {
+      .map((apply, index) => {
         return `
-     <div class="items-apply" edit="${apply.id}">
-       <button class="btn-del" apply_id="${apply.id}">-</button>
-       <img src="${apply.image}" alt="">
+       <div class="items-apply" edit="${apply.id}">
+       <button class="btn-del" apply_id="${apply.id}" data-delete="true">-</button>
+       
+       <img class="img-app" src="${apply.image}" alt="">
+       <div class="loader  loader__deltapp-${index} loadingg loader-hidden"></div>
        <span>${apply.name}</span>
      </div>
+     
    `;
       })
       .join(" ");
@@ -50,17 +55,18 @@ export function setPageButtonEvent() {
   });
 }
 
-function handleDeleteButtonClick(delUngdung) {
-  let applyId = parseInt(delUngdung.getAttribute("apply_id"));
-  deleteApply(applyId);
-  showListApplication();
-}
-
 function initializeDeleteButtonsEvent() {
   const deleteBtn = document.querySelectorAll(".btn-del");
-  deleteBtn.forEach((delUngdung) => {
-    delUngdung.addEventListener("click", () => {
-      handleDeleteButtonClick(delUngdung);
+  deleteBtn.forEach((delUngdung, i) => {
+    delUngdung.addEventListener("click", async () => {
+      const id = parseInt(delUngdung.getAttribute("apply_id"));
+
+      loading([[`loader__deltapp-${i}`, `spin`]], { status: true });
+      await deleteApply(id);
+
+      removeApplicationById(id);
+      showListApplication();
+      loading([[`loader__deltapp-${i}`, `spin`]], { status: false });
     });
   });
 }

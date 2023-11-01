@@ -7,21 +7,21 @@ import {
 
 //DELETE
 export function deleteApply(applyId) {
-  fetch(`${API_URL}/applications/${applyId}`, {
+ return fetch(`${API_URL}/applications/${applyId}`, {
     method: "DELETE",
   })
-    .then((response) => {
-      if (response.ok) {
-        const appIndex = findApplicationByIndex(applyId);
-        const applicationState = getApplicationState();
-        if (appIndex !== -1) {
-          applicationState.splice(appIndex, 1);
-        }
-      }
-    })
-    .catch((error) => {
-      console.error("Lỗi kết nối đến API: " + error);
-    });
+    // .then((response) => {
+    //   if (response.ok) {
+    //     const appIndex = findApplicationByIndex(applyId);
+    //     const applicationState = getApplicationState();
+    //     if (appIndex !== -1) {
+    //       applicationState.splice(appIndex, 1);
+    //     }
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.error("Lỗi kết nối đến API: " + error);
+    // });
 }
 
 //CREAT

@@ -5,6 +5,7 @@ import {
   updateData,
 } from "../api/applicationFetch.js";
 import { findApplicationById } from "../service/applications.js";
+import { loading } from "./common.js";
 
 function getDOMForms() {
   const overlay = document.querySelector(".overlay");
@@ -24,34 +25,37 @@ function getDOMForms() {
 export function initializeFormActions() {
   const addButton = document.querySelector(".icon-btn-add");
   const cancelButton = document.getElementById("btn-cancel");
+  const btnAdd = document.getElementById("btnSubmit");
   const submitForm = document.getElementById("form_add_ud");
   addButton.addEventListener("click", () => {
     const { overlay } = getDOMForms();
     submitForm.style.display = "block";
     overlay.style.display = "block";
   });
-  submitForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+  btnAdd.addEventListener("click", async () => {
     var nameInput = document.getElementById("name_icon");
     const uploadedImage = document.getElementById("uploadedImage");
-    if (!nameInput.value) {
-      openFormAddApplication();
-    } else {
-      closeFormAddApplication();
-    }
 
     const name = nameInput.value;
     const image = uploadedImage.src;
     const pageIndex = getCurrentPageFromQueryParams();
     if (nameInput.value !== "") {
+      loading([["loader__addapp", "spin"]], { status: true });
       const newApplication = {
         name: name,
         image: image,
       };
 
-      addApplicationToCustomPage(newApplication, pageIndex);
+      await addApplicationToCustomPage(newApplication, pageIndex);
+      loading([["loader__addapp", "spin"]], { status: false });
+      showListApplication();
     }
-    showListApplication();
+
+    if (!nameInput.value) {
+      openFormAddApplication();
+    } else {
+      closeFormAddApplication();
+    }
     nameInput.value = "";
     nameInput.form.reset();
     uploadedImage.src = "";
@@ -130,12 +134,14 @@ export function openFormEditApplication() {
           updatedData.element.children.length - 2
         ].src = updatedData.image;
       }
-      updateData(
+      loading([["loader__editapp", "spin"]], { status: true });
+      await updateData(
         updatedData.id,
         updatedData.name,
         updatedData.image,
         updatedData.pageIndex
       );
+      loading([["loader__editapp", "spin"]], { status: false });
       updatedData.id = "";
       updatedData.name = "";
       updatedData.image = "";

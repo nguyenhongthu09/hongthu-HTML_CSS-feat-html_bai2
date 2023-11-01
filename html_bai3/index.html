@@ -20,13 +20,19 @@
     <div class="pages">
       <div class="del-page">
         <button type="submit" id="xoapage">Del Page</button>
+        <div class="loader loader__delpage loader-hidden"></div>
       </div>
       <div class="add-page">
         <button id="thempage">Add Page</button>
+        <div class="loader loader__addpage loader-hidden"></div>
       </div>
+   
     </div>
     <div class="overlay"></div>
   </div>
+
+ 
+
   <form id="form_add_ud" action="" class="form-add-ungdung">
     <div class="form_add_ud_name">
       <input type="text" id="name_icon" placeholder="Name ">
@@ -37,10 +43,12 @@
       <img id="uploadedImage" src="#" alt="Uploaded Image" accept="image/png, image/jpeg">
     </div>
 
-    <button type="submit" id="btnSubmit">Add</button>
+    <button type="button" id="btnSubmit">Add</button>
+    
     <button type="button" id="btn-cancel">Cancel</button>
+   
   </form>
-
+  <div class="loader  loader__addapp loader-hidden"></div>
 
   <form id="form_edit_ud" class="form-edit-ungdung" action=""   enctype="multipart/form-data">
     <div class="form_edit_ud_name">
@@ -54,7 +62,7 @@
     <button type="button" id="btnEditSubmit">Chỉnh sửa</button>
     <button type="button" id="btnEditCancel">Hủy</button>
   </form>
-
+  <div class="loader  loader__editapp loader-hidden"></div>
 
 
 
@@ -66,6 +74,8 @@
       < </button>
         <button id="next-slider"> > </button>
   </div>
+  <div class="loader  loader__page"></div>
+
   <footer class="number-page">Page <span id="current-page"></span></footer>
 </body>
 <script src="./js/main.js" type="module"></script>

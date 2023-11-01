@@ -15,6 +15,7 @@
     .pages {
         display: flex;
         justify-content: space-between;
+        position: relative;
     }
 
     .icon-add button {
@@ -31,7 +32,7 @@
     .add-page button {
         border-radius: 5px;
     }
-
+    
     .del-page button {
         margin-right: 5px;
     }
@@ -165,10 +166,11 @@
         cursor: pointer;
         outline: inherit;
         border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        padding: 0px;
+        width: 25px;
+        height: 25px;
+        padding: 3px;
         display: none;
+        
     }
 
     .items-apply:hover .btn-del {
@@ -232,5 +234,75 @@
         left: 50%;
         transform: translateX(-50%);
       }
+      
+      .loader__page{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transition: opacity 0.75s  ,visibility 0.75s ;
+     
+      }
+      .loader__addpage{
+      
+        position: fixed;
+        right: 25px;
+        top: 0;
+        transition: opacity 0.75s  ,visibility 0.75s ;
+      }
+     .loader__delpage{
+        position: fixed;
+        right: 110px;
+        top: 0;
+        transition: opacity 0.75s  ,visibility 0.75s ;
+     }
+     .loader__addapp {
+        z-index: 99;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transition: opacity 0.75s  ,visibility 0.75s ;
+     }
+     .loader__editapp{
+        z-index: 99;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transition: opacity 0.75s  ,visibility 0.75s ;
+     }
+     .loadingg{
+        z-index: 999;
+        position: fixed;
+        margin-top: -18px;
+        transition: opacity 0.75s ,visibility 0.75s;
+     }
+      .loader-hidden{
+            opacity: 0;
+            visibility: hidden;
+          
+      }
+      .loader {
+        border: 5px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 5px solid blue;
+        border-right: 5px solid green;
+        border-bottom: 5px solid red;
+        width: 20px;
+        height: 20px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+        
+      }
+      
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      
 }
 

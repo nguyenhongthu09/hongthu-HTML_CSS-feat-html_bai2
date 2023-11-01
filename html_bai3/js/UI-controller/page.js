@@ -6,23 +6,25 @@ import {
   findPageByIndex,
 } from "../service/page.js";
 import { showListApplication } from "./applicationList.js";
-import {  getPageState } from "../service/page.js";
+import { getPageState } from "../service/page.js";
+import { loading } from "./common.js";
 export function handlePageButtonClick() {
   const addPageButton = document.querySelector(".add-page");
   const delPageButton = document.getElementById("xoapage");
   const pageState = getPageState();
-  addPageButton.addEventListener("click", async (event) => {
-    event.preventDefault();
+  addPageButton.addEventListener("click", async () => {
+    loading([["loader__addpage", "spin"]], { status: true });
     const newPage = await addNewPage();
     if (newPage) {
-      const newIndex =pageState.length - 1;
+      const newIndex = pageState.length - 1;
       updateQueryParam(newPage.id);
       showListApplication(newPage.id);
       updateCurrentPageNumber();
       setCurrentPage(newPage.id, newIndex);
     }
+    loading([["loader__addpage", "spin"]], { status: false });
   });
-  delPageButton.addEventListener("click", () => {
+  delPageButton.addEventListener("click",async () => {
     const currentPage = getCurrentPageFromQueryParams();
     const pageToDelete = findPageById(currentPage);
 
@@ -37,12 +39,14 @@ export function handlePageButtonClick() {
       console.error("Không tìm thấy trang để xóa.");
       return;
     }
-    
+    loading([["loader__delpage", "spin"]], { status: true });
     const newPageIndex =
       pageIndexToDelete === 0 ? pageIndexToDelete + 1 : pageIndexToDelete - 1;
     const newPageId = pageState[newPageIndex].id;
 
-    deletePage(pageToDelete);
+   await deletePage(pageToDelete);
+   loading([["loader__delpage", "spin"]], { status: false });
+
     updateQueryParam(newPageId);
   });
   document.addEventListener("pageDeleted", (event) => {
