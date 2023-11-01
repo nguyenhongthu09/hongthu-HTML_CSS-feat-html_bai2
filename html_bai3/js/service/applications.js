@@ -3,15 +3,13 @@ import { fetchApplicationsss } from "../api/applicationFetch.js";
 import { fetchPages } from "../api/pagesFetch.js";
 import { updateQueryParam } from "../UI-controller/page.js";
 import { getPageState, getPageIndexById } from "./page.js";
-export function getApplicationState() {
-  return state.applicationState;
-}
 
-export function findApplicationById(appId) {
-  return state.applicationState.find((app) => app.id === appId);
-}
+export const getApplicationState = () => state.applicationState;
 
-export function calculateCurrentId() {
+export const findApplicationById = (appId) =>
+  state.applicationState.find((app) => app.id === appId);
+
+export const calculateCurrentId = () => {
   let maxId = 0;
   for (const apply of getApplicationState()) {
     if (apply.id > maxId) {
@@ -19,9 +17,9 @@ export function calculateCurrentId() {
     }
   }
   return maxId;
-}
+};
 
-function getPageIdURL() {
+const getPageIdURL = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const pageIdFromURL = urlParams.get("pages");
   const pageState = getPageState();
@@ -30,9 +28,9 @@ function getPageIdURL() {
   } else if (pageState.length > 0 && pageState[0]) {
     return pageState[0].id;
   }
-}
+};
 
-export async function initializeState() {
+export const initializeState = async () => {
   try {
     const pagesData = await fetchPages();
     const applicationsData = await fetchApplicationsss();
@@ -57,16 +55,14 @@ export async function initializeState() {
       }
     }
 
-    console.log("state.idUrl", state.idUrl);
-
     return true;
   } catch (error) {
     console.error("Lỗi khi khởi tạo trạng thái:", error);
     return false;
   }
-}
+};
 
-export function changPages(direction) {
+export const changPages = (direction) => {
   const currentIndex = getPageIndexById(state.idUrl);
   const pageState = getPageState();
   console.log(currentIndex, "currentindex cua trang");
@@ -80,20 +76,18 @@ export function changPages(direction) {
   if (state.idUrl !== pageState[currentIndex].id) {
     updateQueryParam(state.idUrl);
   }
-}
+};
 
-export function findApplicationByIndex(appId) {
-  return state.applicationState.findIndex((app) => app.id === appId);
-}
+export const findApplicationByIndex = (appId) =>
+  state.applicationState.findIndex((app) => app.id === appId);
 
-export function findApplicationByFilter(pageIndex) {
-  return state.applicationState.filter((app) => app.pageIndex === pageIndex);
-}
+export const findApplicationByFilter = (pageIndex) =>
+  state.applicationState.filter((app) => app.pageIndex === pageIndex);
 
-export function removeApplicationById(id) {
+export const removeApplicationById = (id) => {
   const appstate = getApplicationState();
   const index = appstate.findIndex((app) => app.id === id);
   if (index !== -1) {
     appstate.splice(index, 1);
   }
-}
+};

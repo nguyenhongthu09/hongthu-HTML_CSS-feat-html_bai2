@@ -8,7 +8,8 @@ import {
 import { showListApplication } from "./applicationList.js";
 import { getPageState } from "../service/page.js";
 import { loading } from "./common.js";
-export function handlePageButtonClick() {
+
+export const handlePageButtonClick = () => {
   const addPageButton = document.querySelector(".add-page");
   const delPageButton = document.getElementById("xoapage");
   const pageState = getPageState();
@@ -55,7 +56,7 @@ export function handlePageButtonClick() {
   });
 }
 
-function updateCurrentPageNumber() {
+const updateCurrentPageNumber = () => {
   const currentPageElement = document.getElementById("current-page");
   const currentPage = getCurrentPageFromQueryParams();
   const pageIndex = findPageByIndex(currentPage);
@@ -65,19 +66,18 @@ function updateCurrentPageNumber() {
     currentPageElement.innerText = pageNumber;
   }
 }
-export function updateQueryParam(pageId) {
+export const updateQueryParam = (pageId) => {
   const url = new URL(window.location.href);
   url.searchParams.set("pages", pageId);
   window.history.replaceState({}, "", url);
 }
 
-export function getCurrentPageFromQueryParams() {
+export const getCurrentPageFromQueryParams = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const currentPagee = urlParams.get("pages");
-
   return currentPagee;
 }
-export function updateCurrentPage(newPage) {
+export const updateCurrentPage = (newPage) => {
   const currentPagee = newPage;
   console.log(currentPagee, "current khi add page");
   updateQueryParam(currentPagee);

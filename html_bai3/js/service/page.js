@@ -1,23 +1,17 @@
 import { state } from "../global/state.js";
 import { delPage } from "../api/pagesFetch.js";
 
-export function getPageState() {
-  return state.pageState;
-}
+export const getPageState = () => state.pageState;
 
-export function getIdUrl() {
-  return state.idUrl;
-}
+export const getIdUrl = () => state.idUrl;
 
-export function findPageById(pageId) {
-  return state.pageState.find((page) => page.id === pageId);
-}
+export const findPageById = (pageId) =>
+  state.pageState.find((page) => page.id === pageId);
 
-export function findPageByIndex(pageToDelete) {
-  return state.pageState.findIndex((page) => page.id === pageToDelete.id);
-}
+export const findPageByIndex = (pageToDelete) =>
+  state.pageState.findIndex((page) => page.id === pageToDelete.id);
 
-export async function deletePage(pageToDelete) {
+export const deletePage = async (pageToDelete) => {
   const pageState = getPageState();
   const deleteSuccess = await delPage(pageToDelete.id);
 
@@ -51,14 +45,14 @@ export async function deletePage(pageToDelete) {
     });
     document.dispatchEvent(event);
   }
-}
+};
 
-export function setCurrentPage(newPageId) {
+export const setCurrentPage = (newPageId) => {
   state.idUrl = newPageId;
-}
+};
 
-export function getPageIndexById(pageId) {
+export const getPageIndexById = (pageId) => {
   const index = state.pageState.findIndex((page) => page.id === pageId);
   console.log(pageId, "pageid");
   return index;
-}
+};

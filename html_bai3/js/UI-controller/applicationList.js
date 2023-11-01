@@ -10,7 +10,7 @@ import {
 import { findPageById, getPageState } from "../service/page.js";
 import { loading } from "./common.js";
 
-export async function showListApplication(pageId) {
+export const showListApplication = (pageId) => {
   const cart = document.getElementById("list-items-apply");
   const pageid = pageId || getCurrentPageFromQueryParams();
   const currentPageId = findPageById(pageid);
@@ -39,9 +39,9 @@ export async function showListApplication(pageId) {
   }
   initializeDeleteButtonsEvent();
   editApplicationEvent();
-}
+};
 
-export function setPageButtonEvent() {
+export const setPageButtonEvent = () => {
   const btnNext = document.getElementById("next-slider");
   const btnPrev = document.getElementById("prev-slider");
   btnNext.addEventListener("click", () => {
@@ -53,9 +53,9 @@ export function setPageButtonEvent() {
     changPages("prev");
     showListApplication();
   });
-}
+};
 
-function initializeDeleteButtonsEvent() {
+const initializeDeleteButtonsEvent = () => {
   const deleteBtn = document.querySelectorAll(".btn-del");
   deleteBtn.forEach((delUngdung, i) => {
     delUngdung.addEventListener("click", async () => {
@@ -69,7 +69,7 @@ function initializeDeleteButtonsEvent() {
       loading([[`loader__deltapp-${i}`, `spin`]], { status: false });
     });
   });
-}
+};
 
 const handleEditApp = (element) => {
   const editedNameIconInput = document.getElementById("edited_name_icon");
@@ -108,11 +108,11 @@ const handleEditApp = (element) => {
   });
 };
 
-function editApplicationEvent() {
+const editApplicationEvent = () => {
   let itemsApplyElements = document.querySelectorAll(".items-apply");
   itemsApplyElements.forEach((element) => {
     element?.addEventListener("click", () => {
       handleEditApp(element);
     });
   });
-}
+};

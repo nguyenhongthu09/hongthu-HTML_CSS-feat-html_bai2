@@ -7,7 +7,7 @@ import {
 import { findApplicationById } from "../service/applications.js";
 import { loading } from "./common.js";
 
-function getDOMForms() {
+const getDOMForms = () => {
   const overlay = document.querySelector(".overlay");
   const boxItems = document.getElementById("form_edit_ud");
   var nameError = document.getElementById("name_error");
@@ -20,9 +20,9 @@ function getDOMForms() {
     nameError,
     uploadedImage,
   };
-}
+};
 
-export function initializeFormActions() {
+export const initializeFormActions = () => {
   const addButton = document.querySelector(".icon-btn-add");
   const cancelButton = document.getElementById("btn-cancel");
   const btnAdd = document.getElementById("btnSubmit");
@@ -70,9 +70,9 @@ export function initializeFormActions() {
     submitForm.reset();
   });
   uploadFileImg();
-}
+};
 
-export function uploadFileImg() {
+const uploadFileImg = () => {
   var selectedImage = null;
 
   document.getElementById("file").onchange = function (e) {
@@ -87,9 +87,9 @@ export function uploadFileImg() {
     };
     reader.readAsDataURL(file);
   };
-}
+};
 
-export function uploadedImageEdit() {
+const uploadedImageEdit = () => {
   var selectedImages = null;
   document.getElementById("edited_file").onchange = function (e) {
     var file = document.getElementById("edited_file").files[0];
@@ -103,15 +103,15 @@ export function uploadedImageEdit() {
     };
     reader.readAsDataURL(file);
   };
-}
+};
 
-export function closeFormEditApplication() {
+export const closeFormEditApplication = () => {
   const { boxItems, overlay } = getDOMForms();
   boxItems.style.display = "none";
   overlay.style.display = "none";
-}
+};
 
-export function openFormEditApplication() {
+export const openFormEditApplication = () => {
   const { boxItems, overlay } = getDOMForms();
   const btnSub = document.getElementById("btnEditSubmit");
   boxItems.style.display = "block";
@@ -154,16 +154,16 @@ export function openFormEditApplication() {
   btnEditCancel.addEventListener("click", () => {
     closeFormEditApplication();
   });
-}
-export function openFormAddApplication() {
+};
+export const openFormAddApplication = () => {
   const { submitForm, overlay, nameError } = getDOMForms();
   nameError.style.display = "block";
   submitForm.style.display = "block";
   overlay.style.display = "block";
-}
-export function closeFormAddApplication() {
+};
+export const closeFormAddApplication = () => {
   const { submitForm, overlay, nameError } = getDOMForms();
   nameError.style.display = "none";
   submitForm.style.display = "none";
   overlay.style.display = "none";
-}
+};
