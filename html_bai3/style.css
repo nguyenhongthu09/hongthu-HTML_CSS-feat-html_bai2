@@ -5,11 +5,13 @@
         background-image: url(img/img.jpg);
         background-repeat: no-repeat;
         font-family: 'Urbanist', sans-serif;
+        font-size: 18px;
     }
 
     .buttons {
         display: flex;
         justify-content: space-between;
+        margin-top: 10px;
     }
 
     .pages {
@@ -31,8 +33,19 @@
     .del-page button,
     .add-page button {
         border-radius: 5px;
+        width: 110px;
+        height: 47px;
+        border-radius: 5px;
+        border: none;
+        margin-right: 5px;
+        color: white;
+        font-weight: 600;
     }
-    
+
+    .add-page button {
+        background-color: rgb(0, 153, 255);
+    }
+
     .del-page button {
         margin-right: 5px;
     }
@@ -51,7 +64,6 @@
     #form_add_ud {
 
         width: 100%;
-        height: 150px;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -65,6 +77,11 @@
         border: none;
         outline: none;
         margin: 20px 0px 0px 20px;
+        width: 300px;
+        height: 40px;
+        border-radius: 7px;
+        padding-left: 15px;
+        font-size: 18px;
     }
 
     .form_add_ud_upfile {
@@ -72,28 +89,74 @@
     }
 
     .form_add_ud_upfile {
-        margin-top: 15px;
+        margin-top: 25px;
+
     }
 
     .form_add_ud_upfile img {
         display: none;
-        width: 25px;
-        height: 25px;
+        width: 40px;
+        height: 40px;
+        margin-top: 10px;
+        border-radius: 50%;
+    }
+
+    #edited_uploadedImage {
+        width: 40px;
+        height: 40px;
+        margin-top: 10px;
     }
 
     .form_edit_ud_upfile img {
         display: none;
-        width: 25px;
-        height: 25px;
+        width: 35px;
+        height: 35px;
+        margin-top: 10px;
     }
 
     .form-add-ungdung button {
         margin: 5px 20px;
     }
 
+    .form__add__app {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+    }
+
+    .form__edit__app {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .form-add-button {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        outline: 0;
+        background-color: rgb(112, 204, 204);
+    }
+
+    .form-add-button button {
+        font-size: 18px;
+        border: none;
+        background-color: rgb(112, 204, 204);
+    }
+
+
     .man-hinh-chinh {
         width: 100%;
-        margin-top: 100px;
+        margin-top: 50px;
         max-height: 370px;
         overflow: hidden;
         padding-top: 15px;
@@ -118,15 +181,16 @@
     }
 
     .items-apply span {
-        font-size: 12px;
-        font-weight: 600;
+        font-size: 17px;
+        font-weight: 500;
         margin-top: 5px;
+        color: white;
 
     }
 
     .items-apply img {
-        width: 35px;
-        height: 35px;
+        width: 50px;
+        height: 50px;
     }
 
     #prev-slider {
@@ -136,7 +200,7 @@
         border-radius: 50%;
         padding: 4px 7px;
         border: none;
-        background-color: white;
+        background-color: rgb(0, 174, 255);
         color: #fff;
         left: 0;
         color: black;
@@ -149,16 +213,19 @@
         border-radius: 50%;
         transform: translateY(-50%);
         padding: 4px 7px;
-        background-color: white;
+        background-color: rgb(0, 174, 255);
         color: #fff;
         right: 0px;
         color: black;
+
+
     }
+
 
     .btn-del {
         position: absolute;
-        bottom: 45px;
-        left: 5px;
+        top: -15px;
+        left: -5px;
         background: white;
         border: none;
         color: inherit;
@@ -168,9 +235,9 @@
         border-radius: 50%;
         width: 25px;
         height: 25px;
-        padding: 3px;
+        padding: 0px;
         display: none;
-        
+
     }
 
     .items-apply:hover .btn-del {
@@ -206,6 +273,7 @@
         height: 100%;
         object-fit: contain;
     }
+
     #form_edit_ud {
         position: absolute;
         z-index: 1;
@@ -215,72 +283,57 @@
         background-color: rgb(180, 173, 173);
         display: none;
         width: 100%;
-    
+        font-size: 18px;
     }
-    
+
     .form-edit-ungdung {
         padding: 15px;
     }
-    
+
     .form_edit_ud_name,
-    .form_edit_ud_upfile,
-    #btnEditSubmit {
+    .form_edit_ud_upfile {
         margin-bottom: 10px;
         margin-left: 10px;
+        margin-top: 20px;
     }
+
     .number-page {
         position: fixed;
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-      }
-      
-      .loader__page{
+    }
+
+    .loader__common {
         position: fixed;
         top: 50%;
         left: 50%;
-        transition: opacity 0.75s  ,visibility 0.75s ;
-     
-      }
-      .loader__addpage{
-      
-        position: fixed;
-        right: 25px;
-        top: 0;
-        transition: opacity 0.75s  ,visibility 0.75s ;
-      }
-     .loader__delpage{
-        position: fixed;
-        right: 110px;
-        top: 0;
-        transition: opacity 0.75s  ,visibility 0.75s ;
-     }
-     .loader__addapp {
+        transition: opacity 0.75s, visibility 0.75s;
+    }
+
+
+    .loader__editapp {
         z-index: 99;
         position: fixed;
         top: 50%;
         left: 50%;
-        transition: opacity 0.75s  ,visibility 0.75s ;
-     }
-     .loader__editapp{
-        z-index: 99;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transition: opacity 0.75s  ,visibility 0.75s ;
-     }
-     .loadingg{
+        transition: opacity 0.75s, visibility 0.75s;
+    }
+
+    .loadingg {
         z-index: 999;
         position: fixed;
         margin-top: -18px;
-        transition: opacity 0.75s ,visibility 0.75s;
-     }
-      .loader-hidden{
-            opacity: 0;
-            visibility: hidden;
-          
-      }
-      .loader {
+        transition: opacity 0.75s, visibility 0.75s;
+    }
+
+    .loader-hidden {
+        opacity: 0;
+        visibility: hidden;
+
+    }
+
+    .loader {
         border: 5px solid #f3f3f3;
         border-radius: 50%;
         border-top: 5px solid blue;
@@ -290,19 +343,79 @@
         height: 20px;
         -webkit-animation: spin 2s linear infinite;
         animation: spin 2s linear infinite;
-        
-      }
-      
-      @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
-      }
-      
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      
-}
 
+    }
+
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .btna {
+        position: absolute;
+        left: 42%;
+    }
+
+    .btnb {
+        position: absolute;
+        left: 48%;
+    }
+
+    #load,
+    #loadd {
+        display: none;
+        position: absolute;
+        left: 37%;
+    }
+
+    .thuthu {
+        color: black !important;
+        font-size: 18px !important;
+        backface-visibility: hidden;
+        background-color: rgb(0, 183, 255) !important;
+    }
+
+    .thu {
+        color: white;
+    }
+
+    #file,
+    #edited_file {
+        border-radius: 10px;
+    }
+
+    #edited_name_icon {
+        width: 300px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        padding-left: 10px;
+
+    }
+
+    .addpage {
+        margin-left: 10px;
+        width: 65px;
+        font-size: 20px;
+    }
+
+    .icon-btn-add {
+        background-color: white;
+        color: black;
+    }
+}

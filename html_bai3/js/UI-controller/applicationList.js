@@ -110,8 +110,12 @@ const handleEditApp = (element) => {
 
 const editApplicationEvent = () => {
   let itemsApplyElements = document.querySelectorAll(".items-apply");
+    const btnEdit= document.getElementById("btnEditSubmit");
+    const btnLoad= document.getElementById("loadd");
   itemsApplyElements.forEach((element) => {
     element?.addEventListener("click", () => {
+      btnEdit.style.display = "block";
+      btnLoad.style.display = "none";
       handleEditApp(element);
     });
   });

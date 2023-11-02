@@ -26,13 +26,19 @@ export const initializeFormActions = () => {
   const addButton = document.querySelector(".icon-btn-add");
   const cancelButton = document.getElementById("btn-cancel");
   const btnAdd = document.getElementById("btnSubmit");
+  const load = document.getElementById("load");
   const submitForm = document.getElementById("form_add_ud");
+  const btn = document.querySelector("btn");
   addButton.addEventListener("click", () => {
     const { overlay } = getDOMForms();
     submitForm.style.display = "block";
     overlay.style.display = "block";
+    load.style.display = "none";
+    btnAdd.style.display = "block";
   });
   btnAdd.addEventListener("click", async () => {
+    load.style.display = "block";
+    btnAdd.style.display = "none";
     var nameInput = document.getElementById("name_icon");
     const uploadedImage = document.getElementById("uploadedImage");
 
@@ -40,17 +46,13 @@ export const initializeFormActions = () => {
     const image = uploadedImage.src;
     const pageIndex = getCurrentPageFromQueryParams();
     if (nameInput.value !== "") {
-      loading([["loader__addapp", "spin"]], { status: true });
       const newApplication = {
         name: name,
         image: image,
       };
-
       await addApplicationToCustomPage(newApplication, pageIndex);
-      loading([["loader__addapp", "spin"]], { status: false });
       showListApplication();
     }
-
     if (!nameInput.value) {
       openFormAddApplication();
     } else {
@@ -114,11 +116,15 @@ export const closeFormEditApplication = () => {
 export const openFormEditApplication = () => {
   const { boxItems, overlay } = getDOMForms();
   const btnSub = document.getElementById("btnEditSubmit");
+  // const btnEdit= document.getElementById("btnEditSubmit");
+  const btnLoad = document.getElementById("loadd");
   boxItems.style.display = "block";
   overlay.style.display = "block";
   uploadedImageEdit();
 
   btnSub.addEventListener("click", async () => {
+    btnSub.style.display = "none";
+    btnLoad.style.display = "block";
     const updatedData = window.newData;
     if (updatedData.id) {
       const appToUpdate = findApplicationById(updatedData.id);
@@ -134,14 +140,13 @@ export const openFormEditApplication = () => {
           updatedData.element.children.length - 2
         ].src = updatedData.image;
       }
-      loading([["loader__editapp", "spin"]], { status: true });
       await updateData(
         updatedData.id,
         updatedData.name,
         updatedData.image,
-        updatedData.pageIndex
+        updatedData.pageIndex,
       );
-      loading([["loader__editapp", "spin"]], { status: false });
+
       updatedData.id = "";
       updatedData.name = "";
       updatedData.image = "";
