@@ -25,7 +25,7 @@ export const handlePageButtonClick = () => {
     }
     loading([["loader__addpage", "spin"]], { status: false });
   });
-  delPageButton.addEventListener("click",async () => {
+  delPageButton.addEventListener("click", async () => {
     const currentPage = getCurrentPageFromQueryParams();
     const pageToDelete = findPageById(currentPage);
 
@@ -45,8 +45,8 @@ export const handlePageButtonClick = () => {
       pageIndexToDelete === 0 ? pageIndexToDelete + 1 : pageIndexToDelete - 1;
     const newPageId = pageState[newPageIndex].id;
 
-   await deletePage(pageToDelete);
-   loading([["loader__delpage", "spin"]], { status: false });
+    await deletePage(pageToDelete);
+    loading([["loader__delpage", "spin"]], { status: false });
 
     updateQueryParam(newPageId);
   });
@@ -54,7 +54,7 @@ export const handlePageButtonClick = () => {
     const newCurrentPage = event.detail.newCurrentPage;
     showListApplication(newCurrentPage);
   });
-}
+};
 
 const updateCurrentPageNumber = () => {
   const currentPageElement = document.getElementById("current-page");
@@ -65,20 +65,20 @@ const updateCurrentPageNumber = () => {
     const pageNumber = pageIndex + 1;
     currentPageElement.innerText = pageNumber;
   }
-}
+};
 export const updateQueryParam = (pageId) => {
   const url = new URL(window.location.href);
   url.searchParams.set("pages", pageId);
   window.history.replaceState({}, "", url);
-}
+};
 
 export const getCurrentPageFromQueryParams = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const currentPagee = urlParams.get("pages");
   return currentPagee;
-}
+};
 export const updateCurrentPage = (newPage) => {
   const currentPagee = newPage;
   console.log(currentPagee, "current khi add page");
   updateQueryParam(currentPagee);
-}
+};

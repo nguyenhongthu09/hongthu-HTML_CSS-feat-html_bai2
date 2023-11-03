@@ -5,7 +5,6 @@ import {
   updateData,
 } from "../api/applicationFetch.js";
 import { findApplicationById } from "../service/applications.js";
-import { loading } from "./common.js";
 
 const getDOMForms = () => {
   const overlay = document.querySelector(".overlay");
@@ -116,7 +115,7 @@ export const closeFormEditApplication = () => {
 export const openFormEditApplication = () => {
   const { boxItems, overlay } = getDOMForms();
   const btnSub = document.getElementById("btnEditSubmit");
-  // const btnEdit= document.getElementById("btnEditSubmit");
+  const editedUploadedImage = document.getElementById("edited_uploadedImage");
   const btnLoad = document.getElementById("loadd");
   boxItems.style.display = "block";
   overlay.style.display = "block";
@@ -137,14 +136,15 @@ export const openFormEditApplication = () => {
           updatedData.element.children.length - 1
         ].innerText = updatedData.name;
         updatedData.element.children[
-          updatedData.element.children.length - 2
+          updatedData.element.children.length - 3
         ].src = updatedData.image;
       }
+
       await updateData(
         updatedData.id,
         updatedData.name,
         updatedData.image,
-        updatedData.pageIndex,
+        updatedData.pageIndex
       );
 
       updatedData.id = "";

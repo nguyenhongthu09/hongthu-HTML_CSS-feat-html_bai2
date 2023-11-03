@@ -24,7 +24,6 @@ export const showListApplication = (pageId) => {
         return `
        <div class="items-apply" edit="${apply.id}">
        <button class="btn-del" apply_id="${apply.id}" data-delete="true">-</button>
-       
        <img class="img-app" src="${apply.image}" alt="">
        <div class="loader  loader__deltapp-${index} loadingg loader-hidden"></div>
        <span>${apply.name}</span>
@@ -77,6 +76,7 @@ const handleEditApp = (element) => {
   const edited_file = document.querySelector("#edited_file");
   const idCurrentEdit = parseInt(element.getAttribute("edit"));
   const appToEdit = findApplicationById(idCurrentEdit);
+
   if (appToEdit) {
     editedUploadedImage.style.display = "block";
     editedNameIconInput.value = appToEdit.name;
@@ -93,13 +93,17 @@ const handleEditApp = (element) => {
   }
   editedNameIconInput.addEventListener("change", (e) => {
     newData.name = e.target.value;
+    appToEdit.name = newData.name;
   });
   edited_file.addEventListener("change", (e) => {
+    console.log("image");
     const file = e.target.files[0];
     const reader = new FileReader();
 
     reader.onload = () => {
       newData.image = reader.result;
+      editedUploadedImage.src = reader.result;
+      appToEdit.image = newData.image;
     };
 
     if (file) {
@@ -110,8 +114,8 @@ const handleEditApp = (element) => {
 
 const editApplicationEvent = () => {
   let itemsApplyElements = document.querySelectorAll(".items-apply");
-    const btnEdit= document.getElementById("btnEditSubmit");
-    const btnLoad= document.getElementById("loadd");
+  const btnEdit = document.getElementById("btnEditSubmit");
+  const btnLoad = document.getElementById("loadd");
   itemsApplyElements.forEach((element) => {
     element?.addEventListener("click", () => {
       btnEdit.style.display = "block";

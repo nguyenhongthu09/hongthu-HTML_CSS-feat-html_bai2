@@ -105,6 +105,7 @@
         width: 40px;
         height: 40px;
         margin-top: 10px;
+        border-radius: 50%;
     }
 
     .form_edit_ud_upfile img {
@@ -164,9 +165,9 @@
 
     .iems-applycation {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr ;
         grid-column-gap: 10px;
-        grid-row-gap: 25px;
+        grid-row-gap: 30px;
         margin: 0px 20px;
 
     }
@@ -177,7 +178,7 @@
         justify-content: center;
         align-items: center;
         position: relative;
-
+        width: 82px;
     }
 
     .items-apply span {
@@ -191,6 +192,7 @@
     .items-apply img {
         width: 50px;
         height: 50px;
+        border-radius: 50%;
     }
 
     #prev-slider {
@@ -198,12 +200,12 @@
         top: 50%;
         transform: translateY(-50%);
         border-radius: 50%;
-        padding: 4px 7px;
+        padding: 4px 10px;
         border: none;
-        background-color: rgb(0, 174, 255);
+        background-color: rgb(81, 189, 240);
         color: #fff;
-        left: 0;
-        color: black;
+        left: 5px;
+        color: white;
     }
 
     #next-slider {
@@ -212,11 +214,11 @@
         border: none;
         border-radius: 50%;
         transform: translateY(-50%);
-        padding: 4px 7px;
-        background-color: rgb(0, 174, 255);
+        padding: 4px 10px;
+        background-color: rgb(81, 189, 240);
         color: #fff;
-        right: 0px;
-        color: black;
+        right: 5px;
+        color: white;
 
 
     }
@@ -302,6 +304,8 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
+        font-size: 20px;
+        font-weight: 600;
     }
 
     .loader__common {
@@ -323,7 +327,7 @@
     .loadingg {
         z-index: 999;
         position: fixed;
-        margin-top: -18px;
+        margin-top: -28px;
         transition: opacity 0.75s, visibility 0.75s;
     }
 
@@ -334,13 +338,13 @@
     }
 
     .loader {
-        border: 5px solid #f3f3f3;
+        border: 5px solid #b6a9a9;
         border-radius: 50%;
-        border-top: 5px solid blue;
-        border-right: 5px solid green;
-        border-bottom: 5px solid red;
-        width: 20px;
-        height: 20px;
+        border-top: 5px solid rgb(68, 68, 124);
+        border-right: 5px solid rgb(54, 58, 54);
+        border-bottom: 5px solid rgb(212, 113, 113);
+        width: 40px;
+        height: 40px;
         -webkit-animation: spin 2s linear infinite;
         animation: spin 2s linear infinite;
 
